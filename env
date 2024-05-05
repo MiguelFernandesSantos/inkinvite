@@ -1,0 +1,5 @@
+PORTA=8080
+DB_USER=root
+DB_PASSWORD=root
+DB_URL=jdbc:mysql://localhost:3306/db_inkinvite
+HOST=0.0.0.0
