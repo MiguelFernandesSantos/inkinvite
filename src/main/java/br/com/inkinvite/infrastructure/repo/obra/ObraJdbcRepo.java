@@ -2,7 +2,7 @@ package br.com.inkinvite.infrastructure.repo.obra;
 
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.service.LogService;
-import br.com.inkinvite.domain.obra.CabecalhoObra;
+import br.com.inkinvite.domain.DominioException;
 import br.com.inkinvite.domain.obra.Obra;
 import br.com.inkinvite.domain.obra.ObraNaoExiste;
 import io.agroal.api.AgroalDataSource;
@@ -46,7 +46,13 @@ public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
             statement.setInt(1, numero);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            if (resultSet.getInt("quantidade") == 0) throw new ObraNaoExiste();
+            Integer quantidade = resultSet.getInt("quantidade");
+            resultSet.close();
+            if (quantidade == 0) {
+                throw new ObraNaoExiste();
+            }
+        } catch (DominioException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

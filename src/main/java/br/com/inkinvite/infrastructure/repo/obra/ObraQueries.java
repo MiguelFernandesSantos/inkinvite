@@ -13,7 +13,7 @@ public class ObraQueries {
 
     protected final String QUERY_EDITAR_OBRA =
             "UPDATE obra SET "
-                    + "autor = ?, titulo = ?, descricao = ?, status = ?"
+                    + "autor = ?, titulo = ?, descricao = ?, status = ? "
                     + "WHERE id = ?";
 
     protected final String QUERY_DELETAR_OBRA =

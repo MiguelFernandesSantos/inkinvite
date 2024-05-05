@@ -26,7 +26,7 @@ public class ObraFactory {
                 resultSet.getString("titulo"),
                 resultSet.getString("descricao"),
                 StatusObra.fromId(resultSet.getInt("status")),
-                DataHora.fromString(resultSet.getString("data_criacao"))
+                DataHora.fromString(resultSet.getString("data_criacao"), "yyyy-MM-dd HH:mm:ss")
         );
     }
 

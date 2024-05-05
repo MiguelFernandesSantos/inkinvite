@@ -4,6 +4,7 @@ import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.service.LogService;
 import br.com.inkinvite.domain.obra.Obra;
 import br.com.inkinvite.application.service.ObraService;
+import br.com.inkinvite.domain.obra.ObraNaoExiste;
 
 import java.util.List;
 
@@ -34,9 +35,13 @@ public class ObraUseCase extends UseCase {
         try {
             info("Verificando existencia da obra de numero " + numeroObra);
             obraRepo.verificarExistencia(numeroObra);
+            // TODO verificar se é o autor da obra [NECESSARIO JWT]
             info("Editando a obra de titulo " + obra.getTitulo());
             obraRepo.editar(numeroObra, obra);
             sucesso("Edicao da obra de titulo " + obra.getTitulo() + " realizada com sucesso");
+        } catch (ObraNaoExiste e) {
+            erro("A obra de numero " + numeroObra + " nao existe", e);
+            throw e;
         } catch (Exception e) {
             erro("Ocorreu um erro ao tentar editar a obra de titulo " + obra.getTitulo(), e);
             throw e;
@@ -52,6 +57,9 @@ public class ObraUseCase extends UseCase {
             info("Excluindo a obra de numero " + numeroObra);
             obraRepo.deletar(numeroObra);
             sucesso("Exclusao da obra de numero " + numeroObra + " realizada com sucesso");
+        } catch (ObraNaoExiste e) {
+            erro("A obra de numero " + numeroObra + " nao existe", e);
+            throw e;
         } catch (Exception e) {
             erro("Ocorreu um erro ao tentar excluir a obra de numero " + numeroObra, e);
             throw e;

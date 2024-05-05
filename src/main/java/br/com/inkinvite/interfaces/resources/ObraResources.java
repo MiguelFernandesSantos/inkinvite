@@ -2,6 +2,7 @@ package br.com.inkinvite.interfaces.resources;
 
 import br.com.inkinvite.application.component.ObraComponent;
 import br.com.inkinvite.application.repo.ObraRepo;
+import br.com.inkinvite.domain.obra.ObraNaoExiste;
 import br.com.inkinvite.infrastructure.dto.ObraDto;
 import br.com.inkinvite.application.service.ObraService;
 import jakarta.enterprise.context.RequestScoped;
@@ -39,6 +40,8 @@ public class ObraResources {
         try {
             // TODO obter obra
             return Response.ok().build();
+        } catch (ObraNaoExiste e) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -50,6 +53,8 @@ public class ObraResources {
         try {
             component.editarObra(numeroObra, obra.paraDominio());
             return Response.ok().build();
+        } catch (ObraNaoExiste e) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -61,6 +66,8 @@ public class ObraResources {
         try {
             component.deletarObra(numeroObra);
             return Response.ok().build();
+        } catch (ObraNaoExiste e) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
