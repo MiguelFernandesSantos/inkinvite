@@ -5,15 +5,15 @@ import br.com.inkinvite.domain.modelo.Agregado;
 public class Usuario extends Agregado {
     protected CabecalhoUsuario cabecalho;
 
-    public static Usuario criar(String primeiroNomeUsuario, String segundoNomeUsuario, String loginUsuario, String emailUsuario, String senhaUsuario) {
+    public static Usuario criar(String primeiroNome, String segundoNome, String login, String email, String senha) {
         Usuario usuario = new Usuario();
-        usuario.cabecalho = CabecalhoUsuario.criar(primeiroNomeUsuario, segundoNomeUsuario, loginUsuario, emailUsuario, senhaUsuario);
+        usuario.cabecalho = CabecalhoUsuario.criar(primeiroNome, segundoNome, login, email, senha);
         return usuario;
     }
 
-    public static Usuario carregar(String primeiroNomeUsuario, String segundoNomeUsuario, String loginUsuario, String emailUsuario, String senhaUsuario) {
+    public static Usuario carregar(String primeiroNome, String segundoNome, String login, String email, String senha) {
         Usuario usuario = new Usuario();
-        usuario.cabecalho = CabecalhoUsuario.carregar(primeiroNomeUsuario, segundoNomeUsuario, loginUsuario, emailUsuario);
+        usuario.cabecalho = CabecalhoUsuario.carregar(primeiroNome, segundoNome, login, email);
         return usuario;
     }
 
@@ -39,6 +39,10 @@ public class Usuario extends Agregado {
 
     public String getSenhaUsuario() {
         return cabecalho.getSenhaUsuario();
+    }
+
+    public String getCriacao(String formato) {
+        return cabecalho.getCriacao(formato);
     }
 
 }

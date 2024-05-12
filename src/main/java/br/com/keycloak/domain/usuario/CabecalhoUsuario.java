@@ -54,4 +54,8 @@ public class CabecalhoUsuario extends ObjetoDeValor {
     public DataHora getCriacao() {
         return criacao;
     }
+
+    public String getCriacao(String formato) {
+        return criacao.formatar(formato);
+    }
 }

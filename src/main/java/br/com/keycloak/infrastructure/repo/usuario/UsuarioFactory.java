@@ -10,19 +10,19 @@ import br.com.keycloak.domain.usuario.Usuario;
 
 public class UsuarioFactory {
 
-    public static List<Usuario> mapearObras(ResultSet resultSet) throws SQLException, ParseException {
-        List<Usuario> obras = new ArrayList<>();
-        while (resultSet.next()) obras.add(mapearObra(resultSet));
-        return obras;
+    public static List<Usuario> mapearUsuarios(ResultSet resultSet) throws SQLException, ParseException {
+        List<Usuario> usuarios = new ArrayList<>();
+        while (resultSet.next()) usuarios.add(mapearUsuario(resultSet));
+        return usuarios;
     }
 
-    public static Usuario mapearObra(ResultSet resultSet) throws SQLException, ParseException {
+    public static Usuario mapearUsuario(ResultSet resultSet) throws SQLException, ParseException {
         return Usuario.carregar(
-            resultSet.getString("primeiroNomeUsuario"),
-            resultSet.getString("segundoNomeUsuario"),
-            resultSet.getString("loginUsuario"),
-            resultSet.getString("emailUsuario"),
-            resultSet.getString("senhaUsuario")
+            resultSet.getString("primeiro_nome"),
+            resultSet.getString("segundo_nome"),
+            resultSet.getString("login"),
+            resultSet.getString("email"),
+            resultSet.getString("senha")
         );
     }
 

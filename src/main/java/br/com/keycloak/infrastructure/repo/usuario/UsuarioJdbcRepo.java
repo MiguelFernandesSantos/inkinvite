@@ -31,6 +31,7 @@ public class UsuarioJdbcRepo extends UsuarioQueries implements UsuarioRepo {
             statement.setString(3, usuario.getLoginUsuario());
             statement.setString(4, usuario.getEmailUsuario());
             statement.setString(5, usuario.getSenhaUsuario());
+            statement.setString(6, usuario.getCriacao("yyyy-MM-dd HH:mm:ss"));
             statement.execute();
         } catch (Exception e) {
             throw new RuntimeException(e);

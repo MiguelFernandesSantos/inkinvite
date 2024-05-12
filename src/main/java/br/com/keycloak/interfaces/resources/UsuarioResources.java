@@ -4,7 +4,6 @@ import br.com.keycloak.application.component.UsuarioComponent;
 import br.com.keycloak.application.repo.UsuarioRepo;
 import br.com.keycloak.application.service.LogService;
 import br.com.keycloak.application.service.UsuarioService;
-import br.com.keycloak.domain.usuario.Usuario;
 import br.com.keycloak.infrastructure.dto.UsuarioDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.Consumes;
@@ -29,10 +28,9 @@ public class UsuarioResources {
 
 
     @POST
-    public Response criarusuario(UsuarioDto usuario) {
+    public Response criarUsuario(UsuarioDto usuario) {
         try {
-            Usuario usuarioDominio = usuario.paraDominio();
-            component.criarUsuario(usuarioDominio);
+            component.criarUsuario(usuario.paraDominio());
             return Response.ok().build();
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
