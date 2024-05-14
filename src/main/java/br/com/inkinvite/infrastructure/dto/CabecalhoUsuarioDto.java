@@ -1,6 +1,6 @@
-package br.com.keycloak.infrastructure.dto;
+package br.com.inkinvite.infrastructure.dto;
 
-import br.com.keycloak.domain.usuario.CabecalhoUsuario;
+import br.com.inkinvite.domain.usuario.CabecalhoUsuario;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection

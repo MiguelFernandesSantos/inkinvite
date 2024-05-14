@@ -1,7 +1,7 @@
-package br.com.keycloak.domain.usuario;
+package br.com.inkinvite.domain.usuario;
 
-import br.com.keycloak.domain.modelo.ObjetoDeValor;
-import br.com.keycloak.domain.objetosDeValor.DataHora;
+import br.com.inkinvite.domain.modelo.ObjetoDeValor;
+import br.com.inkinvite.domain.objetosDeValor.DataHora;
 
 public class CabecalhoUsuario extends ObjetoDeValor {
     private String primeiroNomeUsuario;

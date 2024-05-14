@@ -1,4 +1,4 @@
-package br.com.keycloak.domain.usuario;
+package br.com.inkinvite.domain.usuario;
 
 import br.com.inkinvite.domain.modelo.Agregado;
 

@@ -1,4 +1,4 @@
-package br.com.keycloak.infrastructure.repo.usuario;
+package br.com.inkinvite.infrastructure.repo.usuario;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.keycloak.domain.usuario.Usuario;
+import br.com.inkinvite.domain.usuario.Usuario;
 
 public class UsuarioFactory {
 

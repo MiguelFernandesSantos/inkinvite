@@ -1,13 +1,13 @@
-package br.com.keycloak.infrastructure.repo.usuario;
+package br.com.inkinvite.infrastructure.repo.usuario;
 
-import static br.com.keycloak.infrastructure.repo.MySqlConnection.obterStatement;
+import static br.com.inkinvite.infrastructure.repo.MySqlConnection.obterStatement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-import br.com.keycloak.application.repo.UsuarioRepo;
-import br.com.keycloak.application.service.LogService;
-import br.com.keycloak.domain.usuario.Usuario;
+import br.com.inkinvite.application.repo.UsuarioRepo;
+import br.com.inkinvite.application.service.LogService;
+import br.com.inkinvite.domain.usuario.Usuario;
 import io.agroal.api.AgroalDataSource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

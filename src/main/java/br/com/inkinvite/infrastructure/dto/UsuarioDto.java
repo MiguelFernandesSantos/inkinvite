@@ -1,6 +1,6 @@
-package br.com.keycloak.infrastructure.dto;
+package br.com.inkinvite.infrastructure.dto;
 
-import br.com.keycloak.domain.usuario.Usuario;
+import br.com.inkinvite.domain.usuario.Usuario;
 
 public class UsuarioDto {
     public CabecalhoUsuarioDto cabecalho;

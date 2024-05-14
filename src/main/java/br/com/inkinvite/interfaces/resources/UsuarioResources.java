@@ -1,10 +1,10 @@
-package br.com.keycloak.interfaces.resources;
+package br.com.inkinvite.interfaces.resources;
 
-import br.com.keycloak.application.component.UsuarioComponent;
-import br.com.keycloak.application.repo.UsuarioRepo;
-import br.com.keycloak.application.service.LogService;
-import br.com.keycloak.application.service.UsuarioService;
-import br.com.keycloak.infrastructure.dto.UsuarioDto;
+import br.com.inkinvite.application.component.UsuarioComponent;
+import br.com.inkinvite.application.repo.UsuarioRepo;
+import br.com.inkinvite.application.service.LogService;
+import br.com.inkinvite.application.service.UsuarioService;
+import br.com.inkinvite.infrastructure.dto.UsuarioDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
