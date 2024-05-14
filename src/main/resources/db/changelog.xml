@@ -6,5 +6,5 @@
     https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
     http://www.liquibase.org/xml/ns/dbchangelog
     https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <include file="migration/scripts/V01__schema.sql" relativeToChangelogFile="true" />
+    <include file="scripts/V01__schema.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>
