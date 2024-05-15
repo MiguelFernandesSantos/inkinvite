@@ -4,6 +4,8 @@ import br.com.inkinvite.domain.modelo.Entidade;
 import br.com.inkinvite.domain.objetosDeValor.Avaliacao;
 import br.com.inkinvite.domain.objetosDeValor.DataHora;
 
+import java.math.BigDecimal;
+
 public class Capitulo extends Entidade {
     private Integer obra;
     private String titulo;
@@ -11,7 +13,7 @@ public class Capitulo extends Entidade {
     private Integer numeroOrdinal;
     private Avaliacao avaliacao;
 
-    public static Capitulo criar(Integer obra, String titulo) {
+    public static Capitulo criar( Integer obra, String titulo) {
         Capitulo capitulo = new Capitulo();
         capitulo.obra = obra;
         capitulo.titulo = titulo;
@@ -38,11 +40,15 @@ public class Capitulo extends Entidade {
         return titulo;
     }
 
-    public Avaliacao getAvaliacao() {
-        return avaliacao;
+    public BigDecimal getAvaliacao() {
+        return avaliacao != null ? avaliacao.obterValorAvaliacao() : null;
     }
 
     public Integer getNumeroOrdinal() {
         return numeroOrdinal;
+    }
+
+    public DataHora getDataCriacao() {
+        return dataCriacao;
     }
 }

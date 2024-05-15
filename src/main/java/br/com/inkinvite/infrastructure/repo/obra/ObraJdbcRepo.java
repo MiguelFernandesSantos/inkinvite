@@ -3,6 +3,7 @@ package br.com.inkinvite.infrastructure.repo.obra;
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.service.LogService;
 import br.com.inkinvite.domain.obra.Obra;
+import br.com.inkinvite.domain.obra.ObraCompleta;
 import io.agroal.api.AgroalDataSource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -10,9 +11,11 @@ import jakarta.transaction.Transactional;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static br.com.inkinvite.infrastructure.repo.MySqlConnection.obterStatement;
+import static br.com.inkinvite.infrastructure.repo.obra.ObraFactory.mapearObra;
 
 @ApplicationScoped
 public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
@@ -33,6 +36,22 @@ public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
             statement.setInt(4, obra.getStatusObra());
             statement.setString(5, obra.getPublicacao("yyyy-MM-dd HH:mm:ss"));
             statement.execute();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ObraCompleta buscarObra(Integer obra) {
+        try (Connection conexao = banco.getConnection(); PreparedStatement statementCabecalho = obterStatement(conexao, QUERY_OBTER_OBRA_ESPECIFICA); PreparedStatement statementCapitulos = obterStatement(conexao, QUERY_OBTER_CAPITULOS_OBRA)) {
+            statementCabecalho.setInt(1, obra);
+            ResultSet cabecalho = statementCabecalho.executeQuery();
+            statementCapitulos.setInt(1, obra);
+            ResultSet capitulos = statementCapitulos.executeQuery();
+            ObraCompleta obraCompleta =  mapearObra(cabecalho, capitulos);
+            cabecalho.close();
+            capitulos.close();
+            return obraCompleta;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -50,4 +50,26 @@ public class ObraQueries {
                     + "SET numero_ordinal = ? "
                     + "WHERE id = ? ";
 
+    protected final String QUERY_OBTER_OBRA_ESPECIFICA =
+            "SELECT  "
+                    + "obra.id AS numero, "
+                    + "autor, "
+                    + "usuario.primeiro_nome AS nome_autor, "
+                    + "titulo, "
+                    + "descricao, "
+                    + "status, "
+                    + "obra.data_criacao "
+                    + "FROM obra "
+                    + "INNER JOIN usuario ON usuario.id = obra.autor "
+                    + "WHERE obra.id = ? ";
+
+    protected final String QUERY_OBTER_CAPITULOS_OBRA =
+            "SELECT  "
+                    + "id AS numero, "
+                    + "obra, "
+                    + "titulo, "
+                    + "data_criacao, "
+                    + "numero_ordinal  "
+                    + "FROM capitulo "
+                    + "WHERE obra = ? ";
 }

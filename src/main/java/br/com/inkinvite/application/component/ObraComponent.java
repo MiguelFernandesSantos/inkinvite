@@ -7,6 +7,7 @@ import br.com.inkinvite.domain.obra.Capitulo;
 import br.com.inkinvite.domain.obra.Capitulos;
 import br.com.inkinvite.domain.obra.Obra;
 import br.com.inkinvite.application.service.ObraService;
+import br.com.inkinvite.domain.obra.ObraCompleta;
 
 import java.util.List;
 
@@ -39,5 +40,9 @@ public class ObraComponent {
 
     public void ordenarCapitulos(Integer obra, Capitulos capitulos) {
         useCase.ordenarCapitulos(obra, capitulos);
+    }
+
+    public ObraCompleta obterObra(Integer numero) {
+        return useCase.obterObra(numero);
     }
 }

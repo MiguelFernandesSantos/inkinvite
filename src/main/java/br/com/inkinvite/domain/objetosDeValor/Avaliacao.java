@@ -16,7 +16,7 @@ public class Avaliacao extends ObjetoDeValor {
         return avaliacaoObj;
     }
 
-    public BigDecimal getAvaliacao() {
+    public BigDecimal obterValorAvaliacao() {
         return avaliacao;
     }
 }

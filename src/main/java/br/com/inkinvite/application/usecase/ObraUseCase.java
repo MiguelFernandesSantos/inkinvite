@@ -2,11 +2,8 @@ package br.com.inkinvite.application.usecase;
 
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.service.LogService;
-import br.com.inkinvite.domain.obra.Capitulo;
-import br.com.inkinvite.domain.obra.Capitulos;
-import br.com.inkinvite.domain.obra.Obra;
+import br.com.inkinvite.domain.obra.*;
 import br.com.inkinvite.application.service.ObraService;
-import br.com.inkinvite.domain.obra.ObraNaoExiste;
 
 import java.util.List;
 
@@ -28,6 +25,25 @@ public class ObraUseCase extends UseCase {
             sucesso("Criacao da obra de titulo " + obra.getTitulo() + " realizada com sucesso");
         } catch (Exception e) {
             erro("Ocorreu um erro ao tentar criar a obra de titulo " + obra.getTitulo(), e);
+            throw e;
+        }
+    }
+
+
+    public ObraCompleta obterObra(Integer numeroObra) {
+        start("Iniciando busca da obra de numero " + numeroObra);
+        try {
+            info("Verificando existencia da obra de numero " + numeroObra);
+            obraService.verificarExistencia(numeroObra);
+            info("Buscando a obra de numero " + numeroObra);
+            ObraCompleta obra = obraRepo.buscarObra(numeroObra);
+            sucesso("Busca da obra de numero " + obra + " realizada com sucesso");
+            return  obra;
+        } catch (ObraNaoExiste e) {
+            erro("A obra de numero " + numeroObra + " nao existe", e);
+            throw e;
+        } catch (Exception e) {
+            erro("Ocorreu um erro ao tentar obter a obra de numero " + numeroObra, e);
             throw e;
         }
     }
@@ -114,4 +130,5 @@ public class ObraUseCase extends UseCase {
             throw e;
         }
     }
+
 }

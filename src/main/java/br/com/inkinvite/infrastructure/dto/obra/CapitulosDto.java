@@ -13,6 +13,16 @@ public class CapitulosDto {
 
     public List<CapituloDto> capitulos;
 
+    public static CapitulosDto deDominio(List<Capitulo> capitulos) {
+        CapitulosDto dto = new CapitulosDto();
+        dto.capitulos = new ArrayList<>();
+        for (Capitulo capitulo : capitulos) {
+            CapituloDto capituloDto = CapituloDto.deDominio(capitulo);
+            dto.capitulos.add(capituloDto);
+        }
+        return dto;
+    }
+
     public Capitulos paraDominio() throws ParseException {
         List<Capitulo> capitulos = converterCapitulos();
         return Capitulos.carregar(capitulos);

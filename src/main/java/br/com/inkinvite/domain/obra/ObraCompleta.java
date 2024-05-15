@@ -13,8 +13,9 @@ public class ObraCompleta extends Obra {
     private ObraCompleta() {
     }
 
-    public static ObraCompleta carregar(Integer numeroAutor, String autor, String titulo, String descricao, Integer statusObra, Avaliacao avaliacao, DataHora publicacao, List<Capitulo> capitulos) {
+    public static ObraCompleta carregar(Integer numeroObra, Integer numeroAutor, String autor, String titulo, String descricao, Integer statusObra, Avaliacao avaliacao, DataHora publicacao, List<Capitulo> capitulos) {
         ObraCompleta obraCompleta = new ObraCompleta();
+        obraCompleta.numero = numeroObra;
         obraCompleta.cabecalho = CabecalhoObra.carregar(numeroAutor, autor, titulo, descricao, StatusObra.fromId(statusObra), publicacao);
         obraCompleta.avaliacao = avaliacao;
         obraCompleta.capitulos = Capitulos.carregar(capitulos);
@@ -22,7 +23,7 @@ public class ObraCompleta extends Obra {
     }
 
     public BigDecimal getAvaliacao() {
-        return avaliacao.getAvaliacao();
+        return avaliacao != null ? avaliacao.obterValorAvaliacao() : null;
     }
 
     public List<Capitulo> getCapitulos() {

@@ -9,6 +9,12 @@ import java.math.BigDecimal;
 public class AvaliacaoDto {
     public BigDecimal avaliacao;
 
+    public static AvaliacaoDto deDominio(BigDecimal avaliacao) {
+        AvaliacaoDto dto = new AvaliacaoDto();
+        dto.avaliacao = avaliacao;
+        return dto;
+    }
+
     public  Avaliacao paraDominio() {
         return Avaliacao.carregar(avaliacao);
     }

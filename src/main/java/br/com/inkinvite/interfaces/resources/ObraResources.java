@@ -2,7 +2,9 @@ package br.com.inkinvite.interfaces.resources;
 
 import br.com.inkinvite.application.component.ObraComponent;
 import br.com.inkinvite.application.repo.ObraRepo;
+import br.com.inkinvite.domain.obra.ObraCompleta;
 import br.com.inkinvite.domain.obra.ObraNaoExiste;
+import br.com.inkinvite.infrastructure.dto.obra.ObraCompletaDto;
 import br.com.inkinvite.infrastructure.dto.obra.ObraDto;
 import br.com.inkinvite.application.service.ObraService;
 import jakarta.enterprise.context.RequestScoped;
@@ -38,8 +40,9 @@ public class ObraResources {
     @Path("/{numero}")
     public Response obterObra(@PathParam("numero") Integer numero) {
         try {
-            // TODO obter obra
-            return Response.ok().build();
+            ObraCompleta obra = component.obterObra(numero);
+            ObraCompletaDto dto = ObraCompletaDto.deDominio(obra);
+            return Response.ok(dto).build();
         } catch (ObraNaoExiste e) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         } catch (Exception e) {

@@ -14,6 +14,17 @@ public class CapituloDto {
     public Integer numeroOrdinal;
     public AvaliacaoDto avaliacao;
 
+    public static CapituloDto deDominio(Capitulo capitulo) {
+        CapituloDto dto = new CapituloDto();
+        dto.numero = Integer.parseInt(capitulo.getId());
+        dto.obra = capitulo.getObra();
+        dto.titulo = capitulo.getTitulo();
+        dto.dataCriacao = capitulo.getDataCriacao().toString();
+        dto.numeroOrdinal = capitulo.getNumeroOrdinal();
+        dto.avaliacao = capitulo.getAvaliacao() != null ? AvaliacaoDto.deDominio(capitulo.getAvaliacao()) : null;
+        return dto;
+    }
+
     public Capitulo paraDominio() throws ParseException {
         return Capitulo.carregar(
                 numero,
