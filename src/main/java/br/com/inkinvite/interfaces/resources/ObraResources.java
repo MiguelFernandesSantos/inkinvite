@@ -3,7 +3,7 @@ package br.com.inkinvite.interfaces.resources;
 import br.com.inkinvite.application.component.ObraComponent;
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.domain.obra.ObraNaoExiste;
-import br.com.inkinvite.infrastructure.dto.ObraDto;
+import br.com.inkinvite.infrastructure.dto.obra.ObraDto;
 import br.com.inkinvite.application.service.ObraService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.*;

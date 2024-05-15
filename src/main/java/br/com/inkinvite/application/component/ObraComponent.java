@@ -3,6 +3,8 @@ package br.com.inkinvite.application.component;
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.usecase.ObraUseCase;
 import br.com.inkinvite.application.service.LogService;
+import br.com.inkinvite.domain.obra.Capitulo;
+import br.com.inkinvite.domain.obra.Capitulos;
 import br.com.inkinvite.domain.obra.Obra;
 import br.com.inkinvite.application.service.ObraService;
 
@@ -29,5 +31,13 @@ public class ObraComponent {
 
     public List<Obra> obterObrasMaisRecentes(Integer ultimaObra) {
         return useCase.obterObrasMaisRecentes(ultimaObra);
+    }
+
+    public void novoCapitulo(Capitulo capitulo) {
+        useCase.novoCapitulo(capitulo);
+    }
+
+    public void ordenarCapitulos(Integer obra, Capitulos capitulos) {
+        useCase.ordenarCapitulos(obra, capitulos);
     }
 }

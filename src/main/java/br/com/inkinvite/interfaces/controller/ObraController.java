@@ -4,7 +4,10 @@ import br.com.inkinvite.application.component.ObraComponent;
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.service.LogService;
 import br.com.inkinvite.domain.obra.Obra;
-import br.com.inkinvite.infrastructure.dto.ObraDto;
+import br.com.inkinvite.domain.obra.ObraNaoExiste;
+import br.com.inkinvite.infrastructure.dto.obra.CapituloDto;
+import br.com.inkinvite.infrastructure.dto.obra.CapitulosDto;
+import br.com.inkinvite.infrastructure.dto.obra.ObraDto;
 import br.com.inkinvite.application.service.ObraService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.*;
@@ -32,6 +35,32 @@ public class ObraController {
             List<Obra> obras = component.obterObrasMaisRecentes(ultimaObra);
             List<ObraDto> dtos = obras.stream().map(ObraDto::deDominio).toList();
             return Response.ok(dtos).build();
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @POST
+    @Path("{obra}/novo-capitulo")
+    public Response novoCapitulo(@PathParam("obra") Integer obra, CapituloDto capituloDto) {
+        try {
+            component.novoCapitulo(capituloDto.paraDominio());
+            return Response.ok().build();
+        } catch (ObraNaoExiste e) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PUT
+    @Path("{obra}/ordenar-capitulos")
+    public Response ordenarCapitulos(@PathParam("obra") Integer obra, CapitulosDto capitulos) {
+        try {
+            component.ordenarCapitulos(obra, capitulos.paraDominio());
+            return Response.ok().build();
+        } catch (ObraNaoExiste e) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }

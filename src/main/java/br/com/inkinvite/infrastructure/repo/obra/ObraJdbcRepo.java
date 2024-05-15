@@ -2,9 +2,7 @@ package br.com.inkinvite.infrastructure.repo.obra;
 
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.service.LogService;
-import br.com.inkinvite.domain.DominioException;
 import br.com.inkinvite.domain.obra.Obra;
-import br.com.inkinvite.domain.obra.ObraNaoExiste;
 import io.agroal.api.AgroalDataSource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -12,7 +10,7 @@ import jakarta.transaction.Transactional;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static br.com.inkinvite.infrastructure.repo.MySqlConnection.obterStatement;
 
@@ -41,24 +39,6 @@ public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
     }
 
     @Override
-    public void verificarExistencia(Integer numero) {
-        try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_VERIFICAR_EXISTENCIA_OBRA)) {
-            statement.setInt(1, numero);
-            ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            Integer quantidade = resultSet.getInt("quantidade");
-            resultSet.close();
-            if (quantidade == 0) {
-                throw new ObraNaoExiste();
-            }
-        } catch (DominioException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     @Transactional
     public void editar(Integer numeroObra, Obra obra) {
         try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_EDITAR_OBRA)) {
@@ -76,12 +56,17 @@ public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
     @Override
     @Transactional
     public void deletar(Integer numeroObra) {
-        try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_DELETAR_OBRA)) {
-            statement.setInt(1, numeroObra);
-            statement.execute();
+        try (Connection conexao = banco.getConnection(); PreparedStatement statementObras = obterStatement(conexao, QUERY_DELETAR_OBRA); PreparedStatement statementCapitulos = obterStatement(conexao, QUERY_DELETAR_CAPITULOS)) {
+            deletarConteudoObra(numeroObra, statementCapitulos);
+            deletarConteudoObra(numeroObra, statementObras);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void deletarConteudoObra(Integer numeroObra, PreparedStatement statementObras) throws SQLException {
+        statementObras.setInt(1, numeroObra);
+        statementObras.execute();
     }
 
 }

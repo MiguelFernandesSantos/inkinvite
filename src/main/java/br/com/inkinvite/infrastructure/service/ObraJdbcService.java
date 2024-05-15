@@ -2,15 +2,22 @@ package br.com.inkinvite.infrastructure.service;
 
 import br.com.inkinvite.application.service.LogService;
 import br.com.inkinvite.application.service.ObraService;
+import br.com.inkinvite.domain.DominioException;
+import br.com.inkinvite.domain.objetosDeValor.DataHora;
+import br.com.inkinvite.domain.obra.Capitulo;
+import br.com.inkinvite.domain.obra.Capitulos;
 import br.com.inkinvite.domain.obra.Obra;
+import br.com.inkinvite.domain.obra.ObraNaoExiste;
 import br.com.inkinvite.infrastructure.repo.obra.ObraQueries;
 import io.agroal.api.AgroalDataSource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import static br.com.inkinvite.infrastructure.repo.MySqlConnection.obterStatement;
@@ -36,4 +43,56 @@ public class ObraJdbcService extends ObraQueries implements ObraService {
             throw new RuntimeException(e);
         }
     }
+
+
+    @Override
+    public void verificarExistencia(Integer numero) {
+        try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_VERIFICAR_EXISTENCIA_OBRA)) {
+            statement.setInt(1, numero);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            Integer quantidade = resultSet.getInt("quantidade");
+            resultSet.close();
+            if (quantidade == 0) {
+                throw new ObraNaoExiste();
+            }
+        } catch (DominioException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void novoCapitulo(Capitulo capitulo) {
+        try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_INSERIR_NOVO_CAPITULO)) {
+            statement.setInt(1, capitulo.getObra());
+            statement.setString(2, capitulo.getTitulo());
+            statement.setString(3, DataHora.agora().formatar("yyyy-MM-dd HH:mm:ss"));
+            statement.setInt(4, capitulo.getObra());
+            statement.execute();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void ordenarCapitulos(Integer obra, Capitulos capitulos) {
+        try (Connection conexao = banco.getConnection(); PreparedStatement statementOrdem = obterStatement(conexao, QUERY_ATUALIZAR_ORDINAL_OBRA)) {
+            carregarBatch(capitulos, statementOrdem);
+            statementOrdem.executeBatch();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void carregarBatch(Capitulos capitulos, PreparedStatement statement) throws SQLException {
+        for (Capitulo capitulo : capitulos.obterCapitulos()) {
+            statement.setInt(1, capitulo.getNumeroOrdinal());
+            statement.setInt(2, capitulo.getNumeroOrdinal());
+            statement.addBatch();
+        }
+    }
+
 }

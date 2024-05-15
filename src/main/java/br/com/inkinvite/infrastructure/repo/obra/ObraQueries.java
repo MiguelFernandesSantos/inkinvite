@@ -19,17 +19,35 @@ public class ObraQueries {
     protected final String QUERY_DELETAR_OBRA =
             "DELETE FROM obra WHERE id = ?";
 
+    protected final String QUERY_DELETAR_CAPITULOS =
+            "DELETE FROM capitulo WHERE obra = ?";
+
     protected final String QUERY_OBTER_OBRAS_MAIS_RECENTES =
             "SELECT  "
-                    + "id AS numero, "
+                    + "obra.id AS numero, "
                     + "autor, "
-                    + "'' AS nome_autor, " // TODO obter nome do autor
+                    + "usuario.primeiro_nome AS nome_autor, "
                     + "titulo, "
                     + "descricao, "
                     + "status, "
-                    + "data_criacao "
-                    + "FROM obra  "
-                    + "WHERE id < IFNULL(?, (SELECT MAX(sub.id) + 1 FROM obra AS sub)) "
+                    + "obra.data_criacao "
+                    + "FROM obra"
+                    + "INNER JOIN usuario ON usuario.id = obra.autor "
+                    + "WHERE obra.id < IFNULL(?, (SELECT MAX(sub.id) + 1 FROM obra AS sub)) "
                     + "ORDER BY data_criacao DESC ";
+
+    protected final String QUERY_INSERIR_NOVO_CAPITULO =
+            "INSERT INTO capitulo ( "
+                    + "obra, "
+                    + "titulo, "
+                    + "data_criacao, "
+                    + "numero_ordinal"
+                    + ") VALUES (?, ?, ?,  "
+                    + "(SELECT IFNULL(MAX(sub.numero_ordinal), 0) + 1 FROM capitulo sub WHERE sub.obra = ?)) ";
+
+    protected final String QUERY_ATUALIZAR_ORDINAL_OBRA =
+            "UPDATE capitulo "
+                    + "SET numero_ordinal = ? "
+                    + "WHERE id = ? ";
 
 }

@@ -1,4 +1,4 @@
-package br.com.inkinvite.infrastructure.dto;
+package br.com.inkinvite.infrastructure.dto.obra;
 
 import br.com.inkinvite.domain.obra.CabecalhoObra;
 import io.quarkus.runtime.annotations.RegisterForReflection;
