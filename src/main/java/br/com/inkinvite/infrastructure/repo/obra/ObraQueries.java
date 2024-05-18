@@ -31,10 +31,11 @@ public class ObraQueries {
                     + "descricao, "
                     + "status, "
                     + "obra.data_criacao "
-                    + "FROM obra"
+                    + "FROM obra "
                     + "INNER JOIN usuario ON usuario.id = obra.autor "
                     + "WHERE obra.id < IFNULL(?, (SELECT MAX(sub.id) + 1 FROM obra AS sub)) "
-                    + "ORDER BY data_criacao DESC ";
+                    + "ORDER BY data_criacao "
+                    + "ASC LIMIT 10";
 
     protected final String QUERY_INSERIR_NOVO_CAPITULO =
             "INSERT INTO capitulo ( "

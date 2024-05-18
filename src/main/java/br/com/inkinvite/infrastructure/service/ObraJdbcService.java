@@ -87,10 +87,11 @@ public class ObraJdbcService extends ObraQueries implements ObraService {
             throw new RuntimeException(e);
         }
     }
+
     private void carregarBatch(Capitulos capitulos, PreparedStatement statement) throws SQLException {
         for (Capitulo capitulo : capitulos.obterCapitulos()) {
             statement.setInt(1, capitulo.getNumeroOrdinal());
-            statement.setInt(2, capitulo.getNumeroOrdinal());
+            statement.setInt(2, Integer.parseInt(capitulo.getId()));
             statement.addBatch();
         }
     }
