@@ -4,7 +4,6 @@ import br.com.inkinvite.application.repo.UsuarioRepo;
 import br.com.inkinvite.application.service.LogService;
 import br.com.inkinvite.application.service.UsuarioService;
 import br.com.inkinvite.domain.usuario.Usuario;
-import br.com.inkinvite.application.usecase.UseCase;
 
 public class UsuarioUseCase extends UseCase {
 
