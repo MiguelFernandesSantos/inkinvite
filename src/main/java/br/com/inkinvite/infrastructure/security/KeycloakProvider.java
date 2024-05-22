@@ -1,4 +1,4 @@
-package br.com.inkinvite.security;
+package br.com.inkinvite.infrastructure.security;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.keycloak.OAuth2Constants;

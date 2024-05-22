@@ -2,14 +2,13 @@ package br.com.inkinvite.application.usecase;
 
 import br.com.inkinvite.application.repo.UsuarioRepo;
 import br.com.inkinvite.application.service.LogService;
-import br.com.inkinvite.application.service.UsuarioService;
 import br.com.inkinvite.domain.usuario.Usuario;
 
 public class UsuarioUseCase extends UseCase {
 
     private final UsuarioRepo usuarioRepo;
 
-    public UsuarioUseCase(UsuarioRepo usuarioRepo, UsuarioService usuarioService, LogService logService) {
+    public UsuarioUseCase(UsuarioRepo usuarioRepo, LogService logService) {
         super(logService, "UsuarioUseCase");
         this.usuarioRepo = usuarioRepo;
     }
