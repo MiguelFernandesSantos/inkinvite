@@ -6,17 +6,19 @@ import static br.com.inkinvite.infrastructure.repo.MySqlConnection.obterStatemen
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.UserRepresentation;
+
 import br.com.inkinvite.application.repo.UsuarioRepo;
 import br.com.inkinvite.application.service.LogService;
 import br.com.inkinvite.domain.usuario.Usuario;
+import br.com.inkinvite.domain.usuario.UsuarioJaExiste;
 import br.com.inkinvite.infrastructure.security.KeycloakProvider;
 import io.agroal.api.AgroalDataSource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
-import org.keycloak.admin.client.resource.UsersResource;
-import org.keycloak.representations.idm.UserRepresentation;
 
 @ApplicationScoped
 public class UsuarioJdbcRepo extends UsuarioQueries implements UsuarioRepo {
@@ -36,8 +38,10 @@ public class UsuarioJdbcRepo extends UsuarioQueries implements UsuarioRepo {
         try {
             salvarKeyClock(usuario);
             salvarNoBanco(usuario);
+        } catch (UsuarioJaExiste e) {
+            throw new UsuarioJaExiste();
         } catch (Exception e) {
-            throw new RuntimeException("Error creating user", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -45,7 +49,9 @@ public class UsuarioJdbcRepo extends UsuarioQueries implements UsuarioRepo {
         UsersResource usersResource = keycloakProvider.getKeycloakClient().realm(keycloakProvider.getRealmName()).users();
         UserRepresentation user = toUserRepresentation(usuario);
         Response response = usersResource.create(user);
-        if (response.getStatus() >= 200 && response.getStatus() <= 299) throw new RuntimeException();
+        if (response.getStatus() < 200 || response.getStatus() >= 300) {
+            throw new UsuarioJaExiste();
+        }
     }
 
     private void salvarNoBanco(Usuario usuario) {
