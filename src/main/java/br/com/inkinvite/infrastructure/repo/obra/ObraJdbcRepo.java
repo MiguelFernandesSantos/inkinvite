@@ -13,9 +13,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import static br.com.inkinvite.infrastructure.repo.MySqlConnection.obterStatement;
 import static br.com.inkinvite.infrastructure.repo.obra.ObraFactory.mapearObra;
+import static br.com.inkinvite.infrastructure.repo.obra.ObraFactory.mapearObras;
 
 @ApplicationScoped
 public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
@@ -48,10 +50,26 @@ public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
             ResultSet cabecalho = statementCabecalho.executeQuery();
             statementCapitulos.setInt(1, obra);
             ResultSet capitulos = statementCapitulos.executeQuery();
-            ObraCompleta obraCompleta =  mapearObra(cabecalho, capitulos);
+            ObraCompleta obraCompleta = mapearObra(cabecalho, capitulos);
             cabecalho.close();
             capitulos.close();
             return obraCompleta;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Obra> buscarObras(Integer ultimaObra, String pesquisa, Integer limite) {
+        try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_BUSCAR_OBRAS_PAGINADO)) {
+            statement.setInt(1, ultimaObra);
+            statement.setString(2, obterLikePesquisa(pesquisa));
+            statement.setString(3, obterLikePesquisa(pesquisa));
+            statement.setInt(4, limite == null ? 12 : limite);
+            ResultSet resultSet = statement.executeQuery();
+            List<Obra> obras = mapearObras(resultSet);
+            resultSet.close();
+            return obras;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -88,4 +106,7 @@ public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
         statementObras.execute();
     }
 
+    private static String obterLikePesquisa(String pesquisa) {
+        return "%" + pesquisa + "%";
+    }
 }
