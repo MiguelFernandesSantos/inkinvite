@@ -15,15 +15,15 @@ public class UsuarioUseCase extends UseCase {
     }
 
     public void criarUsuario(Usuario usuario) {
-        start("Iniciando criacao da usuario de titulo " + usuario.getLoginUsuario());
+        start("Iniciando criacao da usuario de titulo " + usuario.getEmail());
         try {
             usuarioRepo.salvar(usuario);
-            sucesso("Criacao do usuario de titulo " + usuario.getLoginUsuario() + " realizada com sucesso");
+            sucesso("Criacao do usuario de titulo " + usuario.getEmail() + " realizada com sucesso");
         } catch (UsuarioJaExiste e){
-            erro("O usuario requisitado " + usuario.getLoginUsuario() + " nao pode ser criado com estes dados.", e);
+            erro("O usuario requisitado " + usuario.getEmail() + " nao pode ser criado com estes dados.", e);
             throw e;
         } catch (Exception e) {
-            erro("Ocorreu um erro ao tentar criar a usuario de titulo " + usuario.getLoginUsuario(), e);
+            erro("Ocorreu um erro ao tentar criar a usuario de titulo " + usuario.getEmail(), e);
             throw e;
         }
     }

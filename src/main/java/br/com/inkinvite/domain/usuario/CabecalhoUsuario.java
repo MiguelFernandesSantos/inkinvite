@@ -4,51 +4,51 @@ import br.com.inkinvite.domain.modelo.ObjetoDeValor;
 import br.com.inkinvite.domain.objetosDeValor.DataHora;
 
 public class CabecalhoUsuario extends ObjetoDeValor {
-    private String primeiroNomeUsuario;
-    private String segundoNomeUsuario;
-    private String loginUsuario;
-    private String emailUsuario;
-    private String senhaUsuario;
+    private String primeiroNome;
+    private String segundoNome;
+    private String login;
+    private String email;
+    private String senha;
     private DataHora criacao;
 
-    public static CabecalhoUsuario criar(String primeiroNomeUsuario, String segundoNomeUsuario, String loginUsuario, String emailUsuario, String senhaUsuario) {
+    public static CabecalhoUsuario criar(String primeiroNome, String segundoNome, String login, String email, String senha) {
         CabecalhoUsuario cabecalhoUsuario = new CabecalhoUsuario();
-        cabecalhoUsuario.primeiroNomeUsuario = primeiroNomeUsuario;
-        cabecalhoUsuario.segundoNomeUsuario = segundoNomeUsuario;
-        cabecalhoUsuario.loginUsuario = loginUsuario;
-        cabecalhoUsuario.emailUsuario = emailUsuario;
-        cabecalhoUsuario.senhaUsuario = senhaUsuario;
+        cabecalhoUsuario.primeiroNome = primeiroNome;
+        cabecalhoUsuario.segundoNome = segundoNome;
+        cabecalhoUsuario.login = login;
+        cabecalhoUsuario.email = email;
+        cabecalhoUsuario.senha = senha;
         cabecalhoUsuario.criacao = DataHora.agora();
         return cabecalhoUsuario;
     }
 
-    public static CabecalhoUsuario carregar(String primeiroNomeUsuario, String segundoNomeUsuario, String loginUsuario, String emailUsuario) {
+    public static CabecalhoUsuario carregar(String primeiroNome, String segundoNome, String login, String email) {
         CabecalhoUsuario cabecalhoUsuario = new CabecalhoUsuario();
-        cabecalhoUsuario.primeiroNomeUsuario = primeiroNomeUsuario;
-        cabecalhoUsuario.segundoNomeUsuario = segundoNomeUsuario;
-        cabecalhoUsuario.loginUsuario = loginUsuario;
-        cabecalhoUsuario.emailUsuario = emailUsuario;
+        cabecalhoUsuario.primeiroNome = primeiroNome;
+        cabecalhoUsuario.segundoNome = segundoNome;
+        cabecalhoUsuario.login = login;
+        cabecalhoUsuario.email = email;
         return cabecalhoUsuario;
     }
 
-    public String getPrimeiroNomeUsuario() {
-        return primeiroNomeUsuario;
+    public String getPrimeiroNome() {
+        return primeiroNome;
     }
 
-    public String getSegundoNomeUsuario() {
-        return segundoNomeUsuario;
+    public String getSegundoNome() {
+        return segundoNome;
     }
 
-    public String getLoginUsuario() {
-        return loginUsuario;
+    public String getLogin() {
+        return login;
     }
 
-    public String getEmailUsuario() {
-        return emailUsuario;
+    public String getEmail() {
+        return email;
     }
 
-    public String getSenhaUsuario() {
-        return senhaUsuario;
+    public String getSenha() {
+        return senha;
     }
 
     public DataHora getCriacao() {

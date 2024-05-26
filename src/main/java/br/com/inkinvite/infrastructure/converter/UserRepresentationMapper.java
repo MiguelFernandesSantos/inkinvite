@@ -11,11 +11,11 @@ public class UserRepresentationMapper {
 
     public static  UserRepresentation paraUserRepresentation(Usuario usuario) {
         UserRepresentation user = new UserRepresentation();
-        user.setUsername(usuario.getLoginUsuario());
-        user.setEmail(usuario.getEmailUsuario());
-        user.setFirstName(usuario.getPrimeiroNomeUsuario());
-        user.setLastName(usuario.getSegundoNomeUsuario());
-        user.setCredentials(Collections.singletonList(criarCredenciais(usuario.getSenhaUsuario())));
+        user.setUsername(usuario.getLogin());
+        user.setEmail(usuario.getEmail());
+        user.setFirstName(usuario.getPrimeiroNome());
+        user.setLastName(usuario.getSegundoNome());
+        user.setCredentials(Collections.singletonList(criarCredenciais(usuario.getSenha())));
         user.setEnabled(true);
         return user;
     }

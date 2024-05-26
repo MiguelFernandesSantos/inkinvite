@@ -56,11 +56,11 @@ public class UsuarioJdbcRepo extends UsuarioQueries implements UsuarioRepo {
 
     private void salvarNoBanco(Usuario usuario) {
         try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_CRIAR_USUARIO)) {
-            statement.setString(1, usuario.getPrimeiroNomeUsuario());
-            statement.setString(2, usuario.getSegundoNomeUsuario());
-            statement.setString(3, usuario.getLoginUsuario());
-            statement.setString(4, usuario.getEmailUsuario());
-            statement.setString(5, usuario.getSenhaUsuario());
+            statement.setString(1, usuario.getPrimeiroNome());
+            statement.setString(2, usuario.getSegundoNome());
+            statement.setString(3, usuario.getLogin());
+            statement.setString(4, usuario.getEmail());
+            statement.setString(5, usuario.getSenha());
             statement.setString(6, usuario.getCriacao("yyyy-MM-dd HH:mm:ss"));
             statement.execute();
         } catch (Exception e) {
