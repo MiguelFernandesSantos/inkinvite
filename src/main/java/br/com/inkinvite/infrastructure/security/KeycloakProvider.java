@@ -27,7 +27,7 @@ public class KeycloakProvider {
     @ConfigProperty(name = "CLIENT_SECRET")
     private String clientSecret;
 
-    public Keycloak getKeycloakClient() {
+    public Keycloak obterClientKeycloak() {
         return KeycloakBuilder.builder()
             .serverUrl(serverURL)
             .realm(realmName)
