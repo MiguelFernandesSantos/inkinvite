@@ -6,23 +6,23 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 @RegisterForReflection
 public class CabecalhoUsuarioDto {
 
-    public String primeiroNomeUsuario;
-    public String segundoNomeUsuario;
-    public String loginUsuario;
-    public String emailUsuario;
-    public String senhaUsuario;
+    public String primeiroNome;
+    public String segundoNome;
+    public String login;
+    public String email;
+    public String senha;
 
     public CabecalhoUsuario paraDominio() {
-        return CabecalhoUsuario.criar(primeiroNomeUsuario, segundoNomeUsuario, loginUsuario, emailUsuario, senhaUsuario);
+        return CabecalhoUsuario.criar(primeiroNome, segundoNome, login, email, senha);
     }
 
     public static CabecalhoUsuarioDto deDominio(CabecalhoUsuario cabecalho) {
         CabecalhoUsuarioDto dto = new CabecalhoUsuarioDto();
-        dto.primeiroNomeUsuario = cabecalho.getPrimeiroNomeUsuario();
-        dto.segundoNomeUsuario = cabecalho.getSegundoNomeUsuario();
-        dto.loginUsuario = cabecalho.getLoginUsuario();
-        dto.emailUsuario = cabecalho.getEmailUsuario();
-        dto.senhaUsuario = cabecalho.getSenhaUsuario();
+        dto.primeiroNome = cabecalho.getPrimeiroNome();
+        dto.segundoNome = cabecalho.getSegundoNome();
+        dto.login = cabecalho.getLogin();
+        dto.email = cabecalho.getEmail();
+        dto.senha = cabecalho.getSenha();
         return dto;
     }
 }

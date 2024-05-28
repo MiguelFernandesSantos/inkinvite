@@ -3,7 +3,7 @@ package br.com.inkinvite.interfaces.resources;
 import br.com.inkinvite.application.component.UsuarioComponent;
 import br.com.inkinvite.application.repo.UsuarioRepo;
 import br.com.inkinvite.application.service.LogService;
-import br.com.inkinvite.application.service.UsuarioService;
+import br.com.inkinvite.domain.usuario.UsuarioJaExiste;
 import br.com.inkinvite.infrastructure.dto.UsuarioDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.Consumes;
@@ -22,18 +22,23 @@ public class UsuarioResources {
 
     final UsuarioComponent component;
 
-    public UsuarioResources(UsuarioRepo usuarioRepo, UsuarioService usuarioService, LogService logService) {
-        this.component = new UsuarioComponent(usuarioRepo, usuarioService, logService);
+    public UsuarioResources(UsuarioRepo usuarioRepo,  LogService logService) {
+        this.component = new UsuarioComponent(usuarioRepo,  logService);
     }
-
 
     @POST
     public Response criarUsuario(UsuarioDto usuario) {
         try {
             component.criarUsuario(usuario.paraDominio());
             return Response.ok().build();
+        } catch (UsuarioJaExiste e) {
+            Response response = Response.status(Response.Status.CONFLICT)
+                                        .entity(e.toString())
+                                        .type(MediaType.TEXT_PLAIN)
+                                        .build();
+            throw new WebApplicationException(response);
         } catch (Exception e) {
-            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 

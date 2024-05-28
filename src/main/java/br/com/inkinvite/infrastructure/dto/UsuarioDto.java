@@ -6,7 +6,7 @@ public class UsuarioDto {
     public CabecalhoUsuarioDto cabecalho;
 
     public Usuario paraDominio() {
-        return Usuario.criar("Nome", "Sobrenome", "Nomesobrenome", "nome.sobrenome@email.com", "nome123");
+        return Usuario.criar(cabecalho.primeiroNome, cabecalho.segundoNome, cabecalho.login, cabecalho.email, cabecalho.senha);
     }
 
     public static UsuarioDto deDominio(Usuario usuario) {
