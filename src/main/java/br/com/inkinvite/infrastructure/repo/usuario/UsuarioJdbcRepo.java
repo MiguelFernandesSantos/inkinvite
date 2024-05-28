@@ -6,6 +6,7 @@ import static br.com.inkinvite.infrastructure.repo.MySqlConnection.obterStatemen
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -46,11 +47,14 @@ public class UsuarioJdbcRepo extends UsuarioQueries implements UsuarioRepo {
     }
 
     private void salvarKeyClock(Usuario usuario) {
-        UsersResource usersResource = keycloakProvider.obterClientKeycloak().realm(keycloakProvider.getRealmName()).users();
-        UserRepresentation user = paraUserRepresentation(usuario);
-        Response response = usersResource.create(user);
-        if (response.getStatus() < 200 || response.getStatus() >= 300) {
-            throw new UsuarioJaExiste();
+        try (Keycloak keycloak = keycloakProvider.obterClientKeycloak()) {
+            UsersResource usersResource = keycloak.realm(keycloakProvider.getRealmName()).users();
+            UserRepresentation user = paraUserRepresentation(usuario);
+            try (Response response = usersResource.create(user)) {
+                if (response.getStatus() < 200 || response.getStatus() >= 300) {
+                    throw new UsuarioJaExiste();
+                }
+            }
         }
     }
 
