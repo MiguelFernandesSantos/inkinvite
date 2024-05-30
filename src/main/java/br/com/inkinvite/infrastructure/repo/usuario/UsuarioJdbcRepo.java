@@ -6,6 +6,7 @@ import static br.com.inkinvite.infrastructure.repo.MySqlConnection.obterStatemen
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -46,21 +47,24 @@ public class UsuarioJdbcRepo extends UsuarioQueries implements UsuarioRepo {
     }
 
     private void salvarKeyClock(Usuario usuario) {
-        UsersResource usersResource = keycloakProvider.obterClientKeycloak().realm(keycloakProvider.getRealmName()).users();
-        UserRepresentation user = paraUserRepresentation(usuario);
-        Response response = usersResource.create(user);
-        if (response.getStatus() < 200 || response.getStatus() >= 300) {
-            throw new UsuarioJaExiste();
+        try (Keycloak keycloak = keycloakProvider.obterClientKeycloak()) {
+            UsersResource usersResource = keycloak.realm(keycloakProvider.getRealmName()).users();
+            UserRepresentation user = paraUserRepresentation(usuario);
+            try (Response response = usersResource.create(user)) {
+                if (response.getStatus() < 200 || response.getStatus() >= 300) {
+                    throw new UsuarioJaExiste();
+                }
+            }
         }
     }
 
     private void salvarNoBanco(Usuario usuario) {
         try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_CRIAR_USUARIO)) {
-            statement.setString(1, usuario.getPrimeiroNomeUsuario());
-            statement.setString(2, usuario.getSegundoNomeUsuario());
-            statement.setString(3, usuario.getLoginUsuario());
-            statement.setString(4, usuario.getEmailUsuario());
-            statement.setString(5, usuario.getSenhaUsuario());
+            statement.setString(1, usuario.getPrimeiroNome());
+            statement.setString(2, usuario.getSegundoNome());
+            statement.setString(3, usuario.getLogin());
+            statement.setString(4, usuario.getEmail());
+            statement.setString(5, usuario.getSenha());
             statement.setString(6, usuario.getCriacao("yyyy-MM-dd HH:mm:ss"));
             statement.execute();
         } catch (Exception e) {

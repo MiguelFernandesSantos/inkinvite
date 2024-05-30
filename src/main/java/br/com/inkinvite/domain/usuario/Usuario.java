@@ -21,24 +21,24 @@ public class Usuario extends Agregado {
         return cabecalho;
     }
 
-    public String getPrimeiroNomeUsuario() {
-        return cabecalho.getPrimeiroNomeUsuario();
+    public String getPrimeiroNome() {
+        return cabecalho.getPrimeiroNome();
     }
 
-    public String getSegundoNomeUsuario() {
-        return cabecalho.getSegundoNomeUsuario();
+    public String getSegundoNome() {
+        return cabecalho.getSegundoNome();
     }
 
-    public String getLoginUsuario() {
-        return cabecalho.getLoginUsuario();
+    public String getLogin() {
+        return cabecalho.getLogin();
     }
 
-    public String getEmailUsuario() {
-        return cabecalho.getEmailUsuario();
+    public String getEmail() {
+        return cabecalho.getEmail();
     }
 
-    public String getSenhaUsuario() {
-        return cabecalho.getSenhaUsuario();
+    public String getSenha() {
+        return cabecalho.getSenha();
     }
 
     public String getCriacao(String formato) {

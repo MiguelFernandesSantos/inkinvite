@@ -45,4 +45,8 @@ public class ObraComponent {
     public ObraCompleta obterObra(Integer numero) {
         return useCase.obterObra(numero);
     }
+
+    public List<Obra> buscarObras(Integer ultimaObra, String pesquisa, Integer limite) {
+        return useCase.buscarObras(ultimaObra, pesquisa, limite);
+    }
 }

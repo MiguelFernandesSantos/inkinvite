@@ -73,4 +73,20 @@ public class ObraQueries {
                     + "numero_ordinal  "
                     + "FROM capitulo "
                     + "WHERE obra = ? ";
+
+    protected final String QUERY_BUSCAR_OBRAS_PAGINADO =
+            "SELECT   "
+                    + "obra.id AS numero,  "
+                    + "autor,  "
+                    + "usuario.primeiro_nome AS nome_autor,  "
+                    + "titulo,  "
+                    + "descricao,  "
+                    + "status,  "
+                    + "obra.data_criacao  "
+                    + "FROM obra  "
+                    + "INNER JOIN usuario ON usuario.id = obra.autor  "
+                    + "WHERE obra.id > IFNULL(?, (SELECT MIN(sub.id) - 1 FROM obra AS sub)) "
+                    + "AND (descricao LIKE ? OR titulo LIKE ?) "
+                    + "ORDER BY obra.id "
+                    + "LIMIT ? ";
 }

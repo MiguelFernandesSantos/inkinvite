@@ -38,7 +38,7 @@ public class ObraUseCase extends UseCase {
             info("Buscando a obra de numero " + numeroObra);
             ObraCompleta obra = obraRepo.buscarObra(numeroObra);
             sucesso("Busca da obra de numero " + obra + " realizada com sucesso");
-            return  obra;
+            return obra;
         } catch (ObraNaoExiste e) {
             erro("A obra de numero " + numeroObra + " nao existe", e);
             throw e;
@@ -131,4 +131,15 @@ public class ObraUseCase extends UseCase {
         }
     }
 
+    public List<Obra> buscarObras(Integer ultimaObra, String pesquisa, Integer limite) {
+        start("Iniciando busca das " + limite + " obras a partir da obra de numero " + ultimaObra + " com a pesquisa " + pesquisa);
+        try {
+            List<Obra> obras = obraRepo.buscarObras(ultimaObra, pesquisa, limite);
+            sucesso("Busca das " + limite + " obras a partir da obra de numero " + ultimaObra + " com a pesquisa " + pesquisa + " realizada com sucesso");
+            return obras;
+        } catch (Exception e) {
+            erro("Ocorreu um erro ao tentar buscar as " + limite + " obras a partir da obra de numero " + ultimaObra + " com a pesquisa " + pesquisa, e);
+            throw e;
+        }
+    }
 }
