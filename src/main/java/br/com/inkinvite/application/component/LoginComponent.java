@@ -8,11 +8,11 @@ import br.com.inkinvite.domain.login.Login;
 public class LoginComponent {
     final LoginUseCase useCase;
 
-    public LoginComponent(LoginRepo loginRepo,  LogService logService) {
+    public LoginComponent(LoginRepo loginRepo, LogService logService) {
         this.useCase = new LoginUseCase(loginRepo, logService);
     }
 
-    public void recuperarLogin(Login login) {
-        useCase.recuperarLogin(login);
+    public String recuperarLogin(Login login) {
+        return useCase.recuperarLogin(login);
     }
 }

@@ -13,13 +13,14 @@ public class LoginUseCase extends UseCase {
         this.loginRepo = loginRepo;
     }
 
-    public void recuperarLogin(Login login) {
-        start("Iniciando criacao da usuario de titulo " + login.getLoginUsuario());
+    public String recuperarLogin(Login login) {
+        start("Iniciando recuperacao de usuario " + login.getLoginUsuario());
         try {
-            loginRepo.recuperar(login);
-            sucesso("Criacao do usuario de titulo " + login.getLoginUsuario() + " realizada com sucesso");
+            String result = loginRepo.recuperar(login);
+            sucesso("Recuperacao do usuario de titulo " + login.getLoginUsuario() + " realizada com sucesso");
+            return result;
         } catch (Exception e) {
-            erro("Ocorreu um erro ao tentar criar a usuario de titulo " + login.getLoginUsuario(), e);
+            erro("Ocorreu um erro ao tentar recuperar o usuario " + login.getLoginUsuario(), e);
             throw e;
         }
     }

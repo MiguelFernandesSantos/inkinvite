@@ -22,8 +22,8 @@ public class UsuarioResources {
 
     final UsuarioComponent component;
 
-    public UsuarioResources(UsuarioRepo usuarioRepo,  LogService logService) {
-        this.component = new UsuarioComponent(usuarioRepo,  logService);
+    public UsuarioResources(UsuarioRepo usuarioRepo, LogService logService) {
+        this.component = new UsuarioComponent(usuarioRepo, logService);
     }
 
     @POST
