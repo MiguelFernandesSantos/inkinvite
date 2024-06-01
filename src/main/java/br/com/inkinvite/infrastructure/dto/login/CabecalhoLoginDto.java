@@ -1,6 +1,6 @@
 package br.com.inkinvite.infrastructure.dto.login;
 
-import br.com.inkinvite.domain.login.CabecalhoLogin;
+import br.com.inkinvite.domain.autenticacao.CabecalhoLogin;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection

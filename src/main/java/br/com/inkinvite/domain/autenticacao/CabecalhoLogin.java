@@ -1,4 +1,4 @@
-package br.com.inkinvite.domain.login;
+package br.com.inkinvite.domain.autenticacao;
 
 import br.com.inkinvite.domain.modelo.ObjetoDeValor;
 

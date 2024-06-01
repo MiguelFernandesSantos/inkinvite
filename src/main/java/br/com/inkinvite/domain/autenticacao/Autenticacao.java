@@ -1,18 +1,18 @@
-package br.com.inkinvite.domain.login;
+package br.com.inkinvite.domain.autenticacao;
 
 import br.com.inkinvite.domain.modelo.Agregado;
 
-public class Login extends Agregado {
+public class Autenticacao extends Agregado {
     protected CabecalhoLogin cabecalho;
 
-    public static Login criar(String login, String senha) {
-        Login usuario = new Login();
+    public static Autenticacao criar(String login, String senha) {
+        Autenticacao usuario = new Autenticacao();
         usuario.cabecalho = CabecalhoLogin.criar(login, senha);
         return usuario;
     }
 
-    public static Login carregar(String login, String senha) {
-        Login usuario = new Login();
+    public static Autenticacao carregar(String login, String senha) {
+        Autenticacao usuario = new Autenticacao();
         usuario.cabecalho = CabecalhoLogin.carregar(login, senha);
         return usuario;
     }

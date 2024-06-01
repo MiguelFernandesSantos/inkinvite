@@ -1,15 +1,15 @@
 package br.com.inkinvite.infrastructure.dto.login;
 
-import br.com.inkinvite.domain.login.Login;
+import br.com.inkinvite.domain.autenticacao.Autenticacao;
 
 public class LoginDto {
     public CabecalhoLoginDto cabecalho;
 
-    public Login paraDominio() {
-        return Login.criar(cabecalho.login, cabecalho.senha);
+    public Autenticacao paraDominio() {
+        return Autenticacao.criar(cabecalho.login, cabecalho.senha);
     }
 
-    public static LoginDto deDominio(Login login) {
+    public static LoginDto deDominio(Autenticacao login) {
         LoginDto dto = new LoginDto();
         dto.cabecalho = CabecalhoLoginDto.deDominio(login.getCabecalho());
         return dto;
