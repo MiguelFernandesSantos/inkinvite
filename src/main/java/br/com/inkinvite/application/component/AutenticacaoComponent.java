@@ -7,8 +7,8 @@ import br.com.inkinvite.application.usecase.AutenticacaoUseCase;
 public class AutenticacaoComponent {
     final AutenticacaoUseCase useCase;
 
-    public AutenticacaoComponent(AutenticacaoService authRepo, LogService logService) {
-        this.useCase = new AutenticacaoUseCase(authRepo, logService);
+    public AutenticacaoComponent(AutenticacaoService autenticacaoService, LogService logService) {
+        this.useCase = new AutenticacaoUseCase(autenticacaoService, logService);
     }
 
     public String recuperarLogin(String login, String senha) {

@@ -24,15 +24,15 @@ public class AutenticacaoResources {
 
     final AutenticacaoComponent component;
 
-    public AutenticacaoResources(AutenticacaoService authRepo, LogService logService) {
-        this.component = new AutenticacaoComponent(authRepo, logService);
+    public AutenticacaoResources(AutenticacaoService autenticacaoService, LogService logService) {
+        this.component = new AutenticacaoComponent(autenticacaoService, logService);
     }
 
     @POST
     @Path("/login")
-    public Response login(Map<String, String> credentials) {
+    public Response login(Map<String, String> credenciais) {
         try {
-            String result = component.recuperarLogin(credentials.get("login"), credentials.get("senha"));
+            String result = component.recuperarLogin(credenciais.get("login"), credenciais.get("senha"));
             return Response.status(Response.Status.OK).entity(result).type(MediaType.TEXT_PLAIN).build();
         } catch (UsuarioNaoEncontrado e) {
             Response response = Response.status(Response.Status.NOT_FOUND)

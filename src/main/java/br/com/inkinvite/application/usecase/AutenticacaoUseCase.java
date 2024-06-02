@@ -7,17 +7,17 @@ import br.com.inkinvite.domain.autenticacao.UsuarioNaoEncontrado;
 
 public class AutenticacaoUseCase extends UseCase {
 
-    private final AutenticacaoService authRepo;
+    private final AutenticacaoService autenticacaoService;
 
-    public AutenticacaoUseCase(AutenticacaoService authRepo, LogService logService) {
+    public AutenticacaoUseCase(AutenticacaoService autenticacaoService, LogService logService) {
         super(logService, "LoginUseCase");
-        this.authRepo = authRepo;
+        this.autenticacaoService = autenticacaoService;
     }
 
     public String recuperarLogin(String login, String senha) {
         start("Iniciando recuperacao de usuario " + login);
         try {
-            String result = authRepo.logar(login, senha);
+            String result = autenticacaoService.logar(login, senha);
             sucesso("Recuperacao do usuario de titulo " + login + " realizada com sucesso");
             return result;
         } catch (UsuarioNaoEncontrado e){
