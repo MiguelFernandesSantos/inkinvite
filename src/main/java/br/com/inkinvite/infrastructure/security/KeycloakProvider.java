@@ -37,6 +37,18 @@ public class KeycloakProvider {
             .build();
     }
 
+    public Keycloak obterClientKeycloakPorLogin(String login, String senha) {
+        return KeycloakBuilder.builder()
+                .serverUrl(serverURL)
+                .realm(realmName)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .username(login)
+                .password(senha)
+                .grantType(OAuth2Constants.PASSWORD)
+                .build();
+    }
+
     public String getRealmName() {
         return realmName;
     }
