@@ -2,6 +2,7 @@ package br.com.inkinvite.application.usecase;
 
 import br.com.inkinvite.application.service.AutenticacaoService;
 import br.com.inkinvite.application.service.LogService;
+import br.com.inkinvite.domain.autenticacao.UsuarioInvalido;
 import br.com.inkinvite.domain.autenticacao.UsuarioNaoEncontrado;
 
 public class AutenticacaoUseCase extends UseCase {
@@ -21,6 +22,9 @@ public class AutenticacaoUseCase extends UseCase {
             return result;
         } catch (UsuarioNaoEncontrado e){
             erro("O usuario requisitado " + login + " nao pode ser encontrado com estes dados.", e);
+            throw e;
+        } catch (UsuarioInvalido e){
+            erro("O usuario requisitado " + login + " possui dados invalidos.", e);
             throw e;
         } catch (Exception e) {
             erro("Ocorreu um erro ao tentar recuperar o usuario " + login, e);

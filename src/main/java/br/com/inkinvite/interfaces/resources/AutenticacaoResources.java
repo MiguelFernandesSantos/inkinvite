@@ -1,8 +1,11 @@
 package br.com.inkinvite.interfaces.resources;
 
+import java.util.Map;
+
 import br.com.inkinvite.application.component.AutenticacaoComponent;
 import br.com.inkinvite.application.service.AutenticacaoService;
 import br.com.inkinvite.application.service.LogService;
+import br.com.inkinvite.domain.autenticacao.UsuarioInvalido;
 import br.com.inkinvite.domain.autenticacao.UsuarioNaoEncontrado;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.Consumes;
@@ -27,12 +30,18 @@ public class AutenticacaoResources {
 
     @POST
     @Path("/login")
-    public Response login(String login, String senha) {
+    public Response login(Map<String, String> credentials) {
         try {
-            String result = component.recuperarLogin(login, senha);
+            String result = component.recuperarLogin(credentials.get("login"), credentials.get("senha"));
             return Response.status(Response.Status.OK).entity(result).type(MediaType.TEXT_PLAIN).build();
         } catch (UsuarioNaoEncontrado e) {
             Response response = Response.status(Response.Status.NOT_FOUND)
+                                        .entity(e.toString())
+                                        .type(MediaType.TEXT_PLAIN)
+                                        .build();
+            throw new WebApplicationException(response);
+        } catch (UsuarioInvalido e) {
+            Response response = Response.status(Response.Status.BAD_REQUEST)
                                         .entity(e.toString())
                                         .type(MediaType.TEXT_PLAIN)
                                         .build();
