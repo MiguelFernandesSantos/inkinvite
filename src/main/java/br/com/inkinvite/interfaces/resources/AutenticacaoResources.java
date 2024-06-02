@@ -1,10 +1,9 @@
 package br.com.inkinvite.interfaces.resources;
 
 import br.com.inkinvite.application.component.AutenticacaoComponent;
-import br.com.inkinvite.application.repo.AutenticacaoRepo;
+import br.com.inkinvite.application.service.AutenticacaoService;
 import br.com.inkinvite.application.service.LogService;
 import br.com.inkinvite.domain.autenticacao.UsuarioNaoEncontrado;
-import br.com.inkinvite.infrastructure.dto.login.LoginDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -22,15 +21,15 @@ public class AutenticacaoResources {
 
     final AutenticacaoComponent component;
 
-    public AutenticacaoResources(AutenticacaoRepo authRepo, LogService logService) {
+    public AutenticacaoResources(AutenticacaoService authRepo, LogService logService) {
         this.component = new AutenticacaoComponent(authRepo, logService);
     }
 
     @POST
     @Path("/login")
-    public Response login(LoginDto login) {
+    public Response login(String login, String senha) {
         try {
-            String result = component.recuperarLogin(login.paraDominio());
+            String result = component.recuperarLogin(login, senha);
             return Response.status(Response.Status.OK).entity(result).type(MediaType.TEXT_PLAIN).build();
         } catch (UsuarioNaoEncontrado e) {
             Response response = Response.status(Response.Status.NOT_FOUND)

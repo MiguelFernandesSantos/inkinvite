@@ -37,13 +37,13 @@ public class KeycloakProvider {
             .build();
     }
 
-    public Keycloak obterClientKeycloakPorLogin(String usuario, String senha) {
+    public Keycloak obterClientKeycloakPorLogin(String login, String senha) {
         return KeycloakBuilder.builder()
                 .serverUrl(serverURL)
                 .realm(realmName)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
-                .username(usuario)
+                .username(login)
                 .password(senha)
                 .grantType(OAuth2Constants.PASSWORD)
                 .build();
