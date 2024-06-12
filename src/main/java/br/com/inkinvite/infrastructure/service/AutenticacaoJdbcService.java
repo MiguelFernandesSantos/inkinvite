@@ -1,7 +1,10 @@
 package br.com.inkinvite.infrastructure.service;
 
+import java.util.Collections;
+
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.AccessTokenResponse;
+import org.keycloak.representations.idm.UserRepresentation;
 
 import br.com.inkinvite.application.service.AutenticacaoService;
 import br.com.inkinvite.application.service.LogService;
@@ -32,6 +35,17 @@ public class AutenticacaoJdbcService implements AutenticacaoService {
         }
     }
 
+    @Override
+    public void esqueciSenha(String email) {
+        try {
+            validarEsqueciSenha(email);
+        } catch (DominioException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public String validarLogin(String login, String senha) {
         String token = null;
         try (Keycloak keycloak = keycloakProvider.obterClientKeycloakPorLogin(login, senha)) {
@@ -43,6 +57,17 @@ public class AutenticacaoJdbcService implements AutenticacaoService {
             throw new RuntimeException(e);
         }
         return token;
+    }
+
+    public void validarEsqueciSenha(String email) {
+        try (Keycloak keycloak = keycloakProvider.obterValidacaoAdmin(email)) {
+            UserRepresentation user = keycloak.realm(keycloakProvider.getRealmName()).users().search(email).stream().findFirst().orElse(null);           
+            keycloak.realm(keycloakProvider.getRealmName()).users().get(user.getId()).executeActionsEmail(Collections.singletonList("UPDATE_PASSWORD"));
+        } catch (WebApplicationException keycloakError) {
+            tratarErroHttpKeycloak(keycloakError);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void tratarErroHttpKeycloak(WebApplicationException keycloakError) {

@@ -50,4 +50,15 @@ public class AutenticacaoResources {
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @POST
+    @Path("/esqueci-senha")
+    public Response esqueciSenha(String email) {
+        try {
+            String result = component.esqueciSenha(email);
+            return Response.status(Response.Status.OK).entity(result).type(MediaType.TEXT_PLAIN).build();
+        } catch (Exception e) {
+            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
