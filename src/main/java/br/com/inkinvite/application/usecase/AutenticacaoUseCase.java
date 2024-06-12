@@ -32,12 +32,11 @@ public class AutenticacaoUseCase extends UseCase {
         }
     }
 
-    public String esqueciSenha(String email) {
+    public void esqueciSenha(String email) {
         start("Iniciando recuperacao de usuario " + email);
         try {
-            String result = autenticacaoService.esqueciSenha(email);
+            autenticacaoService.esqueciSenha(email);
             sucesso("Recuperacao do usuario de titulo " + email + " realizada com sucesso");
-            return result;
         } catch (UsuarioNaoEncontrado e){
             erro("O usuario requisitado " + email + " nao pode ser encontrado com estes dados.", e);
             throw e;
