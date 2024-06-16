@@ -4,10 +4,7 @@ import br.com.inkinvite.application.service.LogService;
 import br.com.inkinvite.application.service.ObraService;
 import br.com.inkinvite.domain.DominioException;
 import br.com.inkinvite.domain.objetosDeValor.DataHora;
-import br.com.inkinvite.domain.obra.Capitulo;
-import br.com.inkinvite.domain.obra.Capitulos;
-import br.com.inkinvite.domain.obra.Obra;
-import br.com.inkinvite.domain.obra.ObraNaoExiste;
+import br.com.inkinvite.domain.obra.*;
 import br.com.inkinvite.infrastructure.repo.obra.ObraQueries;
 import io.agroal.api.AgroalDataSource;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -96,6 +93,23 @@ public class ObraJdbcService extends ObraQueries implements ObraService {
             statement.setInt(2, obra);
             statement.setInt(3, capitulo);
             statement.execute();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void verificarExistenciaCapitulo(Integer obra, Integer numeroCapitulo) {
+        try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_VERIFICAR_EXISTENCIA_CAPITULO)) {
+            statement.setInt(1, obra);
+            statement.setInt(2, numeroCapitulo);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            Integer quantidade = resultSet.getInt("quantidade");
+            resultSet.close();
+            if (quantidade == 0) throw new CapituloNaoExiste();
+        } catch (DominioException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

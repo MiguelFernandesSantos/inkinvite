@@ -54,4 +54,8 @@ public class ObraComponent {
     public void adicionarArquivoCapituloObra(Integer obra, Integer capitulo, byte[] bytes,String mimeType ) {
         useCase.adicionarArquivoCapituloObra(obra, capitulo, bytes, mimeType);
     }
+
+    public Capitulo obterCapitulo(Integer obra, Integer numeroCapitulo) {
+        return useCase.obterCapitulo(obra, numeroCapitulo);
+    }
 }

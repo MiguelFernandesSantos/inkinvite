@@ -3,9 +3,8 @@ package br.com.inkinvite.interfaces.resources;
 import br.com.inkinvite.application.component.ObraComponent;
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.service.StorageService;
-import br.com.inkinvite.domain.obra.Obra;
-import br.com.inkinvite.domain.obra.ObraCompleta;
-import br.com.inkinvite.domain.obra.ObraNaoExiste;
+import br.com.inkinvite.domain.obra.*;
+import br.com.inkinvite.infrastructure.dto.obra.CapituloDto;
 import br.com.inkinvite.infrastructure.dto.obra.ObraCompletaDto;
 import br.com.inkinvite.infrastructure.dto.obra.ObraDto;
 import br.com.inkinvite.application.service.ObraService;
@@ -85,6 +84,33 @@ public class ObraResources {
             component.deletarObra(numeroObra);
             return Response.ok().build();
         } catch (ObraNaoExiste e) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @POST
+    @Path("{obra}/novo-capitulo")
+    public Response novoCapitulo(@PathParam("obra") Integer obra, CapituloDto capituloDto) {
+        try {
+            component.novoCapitulo(capituloDto.paraDominio());
+            return Response.ok().build();
+        } catch (ObraNaoExiste e) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GET
+    @Path("{obra}/capitulo/{capitulo}")
+    public Response obterCapitulo(@PathParam("obra") Integer obra, @PathParam("capitulo") Integer numeroCapitulo) {
+        try {
+            Capitulo capitulo = component.obterCapitulo(obra, numeroCapitulo);
+            CapituloDto capituloDto = CapituloDto.deDominio(capitulo);
+            return Response.ok(capituloDto).build();
+        } catch (CapituloNaoExiste e) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);

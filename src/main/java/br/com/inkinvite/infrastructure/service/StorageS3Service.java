@@ -7,13 +7,14 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.net.URI;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -41,6 +42,12 @@ public class StorageS3Service implements StorageService {
         enviarStorage(request, acessKey, acessSecretKey, bytes);
     }
 
+    @Override
+    public byte[] buscarArquivoCapituloObra(Integer obra, Integer capitulo, String mimeType) {
+        String caminhoArquivo = montarCaminhoObra(obra, capitulo, mimeType);
+        return baixarComoBytes(caminhoArquivo);
+    }
+
     private String montarCaminhoObra(Integer obra, Integer capitulo, String mimeType) {
         return obra + "/" + capitulo + "/" + montarNomeArquivo(obra, capitulo, mimeType);
     }
@@ -55,14 +62,14 @@ public class StorageS3Service implements StorageService {
     }
 
     private void enviarStorage(PutObjectRequest request, String accessKey, String accessSecretKey, byte[] bytes) {
-        S3ClientBuilder builder = configurarClienteStorage(accessKey, accessSecretKey);
+        S3ClientBuilder builder = configurarClienteStorage();
         try (S3Client s3Client = builder.build()) {
             s3Client.putObject(request, RequestBody.fromBytes(bytes));
         }
     }
 
-    private S3ClientBuilder configurarClienteStorage(String accessKey, String accessSecretKey) {
-        S3ClientBuilder builder = adicionarCredenciais(accessKey, accessSecretKey);
+    private S3ClientBuilder configurarClienteStorage() {
+        S3ClientBuilder builder = adicionarCredenciais(acessKey, acessSecretKey);
         configurarClienteStorage(builder);
         return builder;
     }
@@ -78,6 +85,14 @@ public class StorageS3Service implements StorageService {
             builder.endpointOverride(URI.create(endPoint)).forcePathStyle(true);
         } else {
             builder.region(Region.of(region));
+        }
+    }
+
+    private byte[] baixarComoBytes(String caminhoArquivo) {
+        S3ClientBuilder builder = configurarClienteStorage();
+        try (S3Client s3 = builder.build()) {
+            GetObjectRequest request = GetObjectRequest.builder().bucket(bucket).key(caminhoArquivo).build();
+            return s3.getObject(request, ResponseTransformer.toBytes()).asByteArray();
         }
     }
 

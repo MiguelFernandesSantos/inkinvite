@@ -38,14 +38,15 @@ public class ObraFactory {
         return capitulos;
     }
 
-    private static Capitulo mapearCapitulo(ResultSet resultCapitulos) throws SQLException, ParseException {
+    public static Capitulo mapearCapitulo(ResultSet resultCapitulos) throws SQLException, ParseException {
         return Capitulo.carregar(
                 resultCapitulos.getInt("numero"),
                 resultCapitulos.getInt("obra"),
                 resultCapitulos.getString("titulo"),
                 DataHora.fromString(resultCapitulos.getString("data_criacao"), "yyyy-MM-dd HH:mm:ss"),
                 resultCapitulos.getInt("numero_ordinal"),
-                null // TODO AVALIAÇÃO
+                null, // TODO AVALIAÇÃO
+                resultCapitulos.getString("mimetype")
         );
     }
 

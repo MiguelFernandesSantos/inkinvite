@@ -150,18 +150,48 @@ public class ObraUseCase extends UseCase {
         start("Iniciando adicao de um arquivo ao capitulo de numero " + capitulo + " da obra de numero " + obra);
         try {
             info("Verificando existencia da obra de numero " + obra);
-            obraService.verificarExistencia(obra);
+            obraService.verificarExistenciaCapitulo(obra, capitulo);
             info("Adicionando um arquivo ao capitulo de numero " + capitulo + " da obra de numero " + obra);
             storageService.adicionarArquivoCapituloObra(obra, capitulo, bytes, mimeType);
             info("Salvando mimetype do arquivo no capitulo de numero " + capitulo + " da obra de numero " + obra);
             obraService.salvarMimeTypeArquivoCapitulo(obra, capitulo, mimeType);
             sucesso("Adicao de um arquivo ao capitulo de numero " + capitulo + " da obra de numero " + obra + " realizada com sucesso");
-        } catch (ObraNaoExiste e) {
-            erro("A obra de numero " + obra + " nao existe", e);
+        } catch (CapituloNaoExiste e) {
+            erro("O capitulo de numero " + capitulo + " da obra de numero " + obra + " nao existe", e);
             throw e;
         } catch (Exception e) {
             erro("Ocorreu um erro ao tentar adicionar um arquivo ao capitulo de numero " + capitulo + " da obra de numero " + obra, e);
             throw e;
+        }
+    }
+
+    public Capitulo obterCapitulo(Integer obra, Integer numeroCapitulo) {
+        start("Iniciando busca do capitulo de numero " + numeroCapitulo + " da obra de numero " + obra);
+        try {
+            info("Verificando existencia da obra de numero " + obra);
+            obraService.verificarExistenciaCapitulo(obra, numeroCapitulo);
+            info("Buscando o capitulo de numero " + numeroCapitulo + " da obra de numero " + obra);
+            Capitulo capitulo = obraRepo.buscarCapitulo(obra, numeroCapitulo);
+            buscarArquivo(obra, numeroCapitulo, capitulo);
+            sucesso("Busca do capitulo de numero " + numeroCapitulo + " da obra de numero " + obra + " realizada com sucesso");
+            return capitulo;
+        } catch (CapituloNaoExiste e) {
+            erro("O capitulo de numero " + numeroCapitulo + " da obra de numero " + obra + " nao existe", e);
+            throw e;
+        } catch (Exception e) {
+            erro("Ocorreu um erro ao tentar buscar o capitulo de numero " + numeroCapitulo + " da obra de numero " + obra, e);
+            throw e;
+        }
+    }
+
+    private void buscarArquivo(Integer obra, Integer numeroCapitulo, Capitulo capitulo) {
+        if (capitulo.possuiMimeType()) {
+            info("Buscando arquivo do capitulo de numero " + numeroCapitulo + " da obra de numero " + obra);
+            byte[] bytes = storageService.buscarArquivoCapituloObra(obra, numeroCapitulo, capitulo.getMimeType());
+            capitulo.adicionarByteArquivos(bytes);
+            info("Arquivo do capitulo de numero " + numeroCapitulo + " da obra de numero " + obra + " encontrado");
+        } else {
+            info("O capitulo de numero " + numeroCapitulo + " da obra de numero " + obra + " nao possui arquivo");
         }
     }
 }
