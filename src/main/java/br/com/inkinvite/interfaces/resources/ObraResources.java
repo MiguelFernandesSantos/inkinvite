@@ -2,6 +2,7 @@ package br.com.inkinvite.interfaces.resources;
 
 import br.com.inkinvite.application.component.ObraComponent;
 import br.com.inkinvite.application.repo.ObraRepo;
+import br.com.inkinvite.application.service.StorageService;
 import br.com.inkinvite.domain.obra.Obra;
 import br.com.inkinvite.domain.obra.ObraCompleta;
 import br.com.inkinvite.domain.obra.ObraNaoExiste;
@@ -24,8 +25,8 @@ public class ObraResources {
 
     final ObraComponent component;
 
-    public ObraResources(ObraRepo obraRepo, ObraService obraService, LogService logService) {
-        this.component = new ObraComponent(obraRepo, obraService, logService);
+    public ObraResources(ObraRepo obraRepo, ObraService obraService, StorageService storageService, LogService logService) {
+        this.component = new ObraComponent(obraRepo, obraService, storageService, logService);
     }
 
 

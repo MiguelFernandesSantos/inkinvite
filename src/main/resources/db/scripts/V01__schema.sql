@@ -29,5 +29,6 @@ CREATE TABLE IF NOT EXISTS capitulo (
     titulo VARCHAR(255) NOT NULL,
     data_criacao TIMESTAMP NOT NULL,
     numero_ordinal INT NOT NULL,
+    mimetype VARCHAR(25),
 	CONSTRAINT fk_obra FOREIGN KEY (obra) REFERENCES obra(id)
 );

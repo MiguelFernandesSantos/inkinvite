@@ -2,6 +2,7 @@ package br.com.inkinvite.application.usecase;
 
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.service.LogService;
+import br.com.inkinvite.application.service.StorageService;
 import br.com.inkinvite.domain.obra.*;
 import br.com.inkinvite.application.service.ObraService;
 
@@ -11,11 +12,13 @@ public class ObraUseCase extends UseCase {
 
     private final ObraRepo obraRepo;
     private final ObraService obraService;
+    private final StorageService storageService;
 
-    public ObraUseCase(ObraRepo obraRepo, ObraService obraService, LogService logService) {
+    public ObraUseCase(ObraRepo obraRepo, ObraService obraService, StorageService storageService, LogService logService) {
         super(logService, "ObraUseCase");
         this.obraRepo = obraRepo;
         this.obraService = obraService;
+        this.storageService = storageService;
     }
 
     public void criarObra(Obra obra) {
@@ -139,6 +142,25 @@ public class ObraUseCase extends UseCase {
             return obras;
         } catch (Exception e) {
             erro("Ocorreu um erro ao tentar buscar as " + limite + " obras a partir da obra de numero " + ultimaObra + " com a pesquisa " + pesquisa, e);
+            throw e;
+        }
+    }
+
+    public void adicionarArquivoCapituloObra(Integer obra, Integer capitulo, byte[] bytes, String mimeType) {
+        start("Iniciando adicao de um arquivo ao capitulo de numero " + capitulo + " da obra de numero " + obra);
+        try {
+            info("Verificando existencia da obra de numero " + obra);
+            obraService.verificarExistencia(obra);
+            info("Adicionando um arquivo ao capitulo de numero " + capitulo + " da obra de numero " + obra);
+            storageService.adicionarArquivoCapituloObra(obra, capitulo, bytes, mimeType);
+            info("Salvando mimetype do arquivo no capitulo de numero " + capitulo + " da obra de numero " + obra);
+            obraService.salvarMimeTypeArquivoCapitulo(obra, capitulo, mimeType);
+            sucesso("Adicao de um arquivo ao capitulo de numero " + capitulo + " da obra de numero " + obra + " realizada com sucesso");
+        } catch (ObraNaoExiste e) {
+            erro("A obra de numero " + obra + " nao existe", e);
+            throw e;
+        } catch (Exception e) {
+            erro("Ocorreu um erro ao tentar adicionar um arquivo ao capitulo de numero " + capitulo + " da obra de numero " + obra, e);
             throw e;
         }
     }

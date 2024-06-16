@@ -88,6 +88,19 @@ public class ObraJdbcService extends ObraQueries implements ObraService {
         }
     }
 
+    @Override
+    @Transactional
+    public void salvarMimeTypeArquivoCapitulo(Integer obra, Integer capitulo, String mimeType) {
+        try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_ALTERAR_MIMETYPE_CAPITULO)) {
+            statement.setString(1, mimeType);
+            statement.setInt(2, obra);
+            statement.setInt(3, capitulo);
+            statement.execute();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void carregarBatch(Capitulos capitulos, PreparedStatement statement) throws SQLException {
         for (Capitulo capitulo : capitulos.obterCapitulos()) {
             statement.setInt(1, capitulo.getNumeroOrdinal());

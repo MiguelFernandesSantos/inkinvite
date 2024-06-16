@@ -89,4 +89,9 @@ public class ObraQueries {
                     + "AND (descricao LIKE ? OR titulo LIKE ?) "
                     + "ORDER BY obra.id "
                     + "LIMIT ? ";
+
+    protected final String QUERY_ALTERAR_MIMETYPE_CAPITULO =
+            "UPDATE capitulo "
+                    + "SET mimetype = ? "
+                    + "WHERE obra = ? AND id = ? ";
 }
