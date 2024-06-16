@@ -14,6 +14,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class ObraController {
 
     @GET
     @Path("/mais-recentes")
+    @Operation(summary = "Busca as obras mais recentes", description = "Permite buscar as obras mais recentes cadastradas no banco de dados.")
     public Response obterObrasMaisRecentes(@QueryParam("ultimaObra") Integer ultimaObra) {
         try {
             List<Obra> obras = component.obterObrasMaisRecentes(ultimaObra);
@@ -44,6 +46,7 @@ public class ObraController {
 
     @PUT
     @Path("{obra}/ordenar-capitulos")
+    @Operation(summary = "Re-ordena os capitulos de uma obra", description = "Permite ordenar os capitulos de uma obra de acordo com o ordinal.")
     public Response ordenarCapitulos(@PathParam("obra") Integer obra, CapitulosDto capitulos) {
         try {
             component.ordenarCapitulos(obra, capitulos.paraDominio());
@@ -58,6 +61,7 @@ public class ObraController {
     @PUT
     @Path("{obra}/capitulo/{capitulo}/adicionar-arquivo")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Operation(summary = "Adiciona um arquivo para a obra especificada", description = "Adiciona o arquivo no storage e grava no banco de dados o mimetype.")
     public Response adicionarArquivoCapituloObra(@PathParam("obra") Integer obra, @PathParam("capitulo") Integer capitulo, @HeaderParam("mimeType") String mimeType, @MultipartForm ArquivoDto arquivo) {
         try {
             component.adicionarArquivoCapituloObra(obra, capitulo, arquivo.bytes, mimeType);

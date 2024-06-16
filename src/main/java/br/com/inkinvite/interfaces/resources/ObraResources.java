@@ -13,6 +13,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import br.com.inkinvite.application.service.LogService;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class ObraResources {
 
 
     @POST
+    @Operation(summary = "Cria uma nova obra", description = "Grava no banco de dados o cabecalho da obra.")
     public Response criarObra(ObraDto obra) {
         try {
             component.criarObra(obra.paraDominio());
@@ -40,6 +42,7 @@ public class ObraResources {
     }
 
     @POST
+    @Operation(summary = "Busca de forma resumida as obras que existem", description = "Busca no banco de dados as obras que existem e estão de acordo com os parametros.")
     public Response buscarObras(@QueryParam("ultimaObra") Integer ultimaObra, @QueryParam("pesquisa") String pesquisa, @QueryParam("limite") Integer limite) {
         try {
             List<Obra> obras = component.buscarObras(ultimaObra, pesquisa, limite);
@@ -52,6 +55,7 @@ public class ObraResources {
 
     @GET
     @Path("/{numero}")
+    @Operation(summary = "Busca uma obra especifica", description = "Busca no banco de dados a obra de numero passada no PathParam junto de seus capitulos.")
     public Response obterObra(@PathParam("numero") Integer numero) {
         try {
             ObraCompleta obra = component.obterObra(numero);
@@ -66,6 +70,7 @@ public class ObraResources {
 
     @PUT
     @Path("/{numero}")
+    @Operation(summary = "Edita uma obra especifica", description = "Altera no banco de dados o cabecalho da obra passada como PathParam.")
     public Response editarObra(@PathParam("numero") Integer numeroObra, ObraDto obra) {
         try {
             component.editarObra(numeroObra, obra.paraDominio());
@@ -79,6 +84,7 @@ public class ObraResources {
 
     @DELETE
     @Path("/{numero}")
+    @Operation(summary = "Deleta uma obra especifica", description = "Deleta do banco de dados a obra passada como PathParam junto de seus capitulos.")
     public Response deletarObra(@PathParam("numero") Integer numeroObra) {
         try {
             component.deletarObra(numeroObra);
@@ -92,6 +98,7 @@ public class ObraResources {
 
     @POST
     @Path("{obra}/novo-capitulo")
+    @Operation(summary = "Adiciona um novo capitulo em uma obra", description = "Adiciona no banco de dados um novo capitulo para a obra informada.")
     public Response novoCapitulo(@PathParam("obra") Integer obra, CapituloDto capituloDto) {
         try {
             component.novoCapitulo(capituloDto.paraDominio());
@@ -105,6 +112,7 @@ public class ObraResources {
 
     @GET
     @Path("{obra}/capitulo/{capitulo}")
+    @Operation(summary = "Obtem o capitulo de uma obra", description = "Busca no banco de dados o capitulo de numero passado no PathParam da obra passada no PathParam junto do arquivo relacionado salvo no storage.")
     public Response obterCapitulo(@PathParam("obra") Integer obra, @PathParam("capitulo") Integer numeroCapitulo) {
         try {
             Capitulo capitulo = component.obterCapitulo(obra, numeroCapitulo);
