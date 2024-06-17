@@ -59,12 +59,13 @@ public class AutenticacaoJdbcService implements AutenticacaoService {
         return token;
     }
 
-    public void validarEsqueciSenha(String email) {
-        try (Keycloak keycloak = keycloakProvider.obterValidacaoAdmin(email)) {
-            UserRepresentation user = keycloak.realm(keycloakProvider.getRealmName()).users().search(email).stream().findFirst().orElse(null);           
+    public void validarEsqueciSenha(String login) {
+        try (Keycloak keycloak = keycloakProvider.obterValidacaoAdmin()) {
+            UserRepresentation user = keycloak.realm(keycloakProvider.getRealmName()).users().search(login).stream().findFirst().orElse(null);
+            if (user == null) {
+                throw new UsuarioNaoEncontrado();
+            }
             keycloak.realm(keycloakProvider.getRealmName()).users().get(user.getId()).executeActionsEmail(Collections.singletonList("UPDATE_PASSWORD"));
-        } catch (WebApplicationException keycloakError) {
-            tratarErroHttpKeycloak(keycloakError);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

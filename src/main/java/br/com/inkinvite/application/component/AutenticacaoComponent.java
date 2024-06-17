@@ -15,7 +15,7 @@ public class AutenticacaoComponent {
         return useCase.recuperarLogin(login, senha);
     }
 
-    public void esqueciSenha(String email) {
-        useCase.esqueciSenha(email);
+    public void esqueciSenha(String login) {
+        useCase.esqueciSenha(login);
     }
 }

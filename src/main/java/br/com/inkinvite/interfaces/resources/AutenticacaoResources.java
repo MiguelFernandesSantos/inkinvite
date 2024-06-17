@@ -53,9 +53,9 @@ public class AutenticacaoResources {
 
     @POST
     @Path("/esqueci-senha")
-    public Response esqueciSenha(String email) {
+    public Response esqueciSenha(Map<String, String> credenciais) {
         try {
-            component.esqueciSenha(email);
+            component.esqueciSenha(credenciais.get("login"));
             return Response.status(Response.Status.OK).entity("Reset de senha com sucesso.").type(MediaType.TEXT_PLAIN).build();
         } catch (Exception e) {
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);

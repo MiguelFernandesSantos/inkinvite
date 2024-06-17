@@ -56,7 +56,7 @@ public class KeycloakProvider {
                 .build();
     }
 
-    public Keycloak obterValidacaoAdmin(String email) {
+    public Keycloak obterValidacaoAdmin() {
         return KeycloakBuilder.builder()
                 .serverUrl(serverURL)
                 .realm(realmName)
