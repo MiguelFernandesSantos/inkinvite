@@ -13,6 +13,7 @@ public class CapituloDto {
     public String dataCriacao;
     public Integer numeroOrdinal;
     public AvaliacaoDto avaliacao;
+    public byte[] arquivo;
 
     public static CapituloDto deDominio(Capitulo capitulo) {
         CapituloDto dto = new CapituloDto();
@@ -22,6 +23,7 @@ public class CapituloDto {
         dto.dataCriacao = capitulo.getDataCriacao().toString();
         dto.numeroOrdinal = capitulo.getNumeroOrdinal();
         dto.avaliacao = capitulo.getAvaliacao() != null ? AvaliacaoDto.deDominio(capitulo.getAvaliacao()) : null;
+        dto.arquivo = capitulo.getArquivo();
         return dto;
     }
 
@@ -32,7 +34,8 @@ public class CapituloDto {
                 titulo,
                 null,
                 numeroOrdinal,
-                avaliacao.paraDominio()
+                avaliacao.paraDominio(),
+                null
         );
     }
 

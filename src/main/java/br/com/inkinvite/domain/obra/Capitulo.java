@@ -12,6 +12,8 @@ public class Capitulo extends Entidade {
     private DataHora dataCriacao;
     private Integer numeroOrdinal;
     private Avaliacao avaliacao;
+    private String mimeType;
+    private byte[] arquivo;
 
     public static Capitulo criar( Integer obra, String titulo) {
         Capitulo capitulo = new Capitulo();
@@ -21,7 +23,7 @@ public class Capitulo extends Entidade {
         return capitulo;
     }
 
-    public static Capitulo carregar(Integer numero, Integer obra, String titulo, DataHora dataCriacao, Integer numeroOrdinal, Avaliacao avaliacao) {
+    public static Capitulo carregar(Integer numero, Integer obra, String titulo, DataHora dataCriacao, Integer numeroOrdinal, Avaliacao avaliacao, String mimeType) {
         Capitulo capitulo = new Capitulo();
         capitulo.numero = numero;
         capitulo.obra = obra;
@@ -29,6 +31,7 @@ public class Capitulo extends Entidade {
         capitulo.dataCriacao = dataCriacao;
         capitulo.numeroOrdinal = numeroOrdinal;
         capitulo.avaliacao = avaliacao;
+        capitulo.mimeType = mimeType;
         return capitulo;
     }
 
@@ -50,5 +53,21 @@ public class Capitulo extends Entidade {
 
     public DataHora getDataCriacao() {
         return dataCriacao;
+    }
+
+    public Boolean possuiMimeType() {
+        return mimeType != null;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public byte[] getArquivo() {
+        return arquivo;
+    }
+
+    public void adicionarByteArquivos(byte[] bytes) {
+        this.arquivo = bytes;
     }
 }

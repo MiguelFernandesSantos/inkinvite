@@ -2,6 +2,7 @@ package br.com.inkinvite.infrastructure.repo.obra;
 
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.service.LogService;
+import br.com.inkinvite.domain.obra.Capitulo;
 import br.com.inkinvite.domain.obra.Obra;
 import br.com.inkinvite.domain.obra.ObraCompleta;
 import io.agroal.api.AgroalDataSource;
@@ -70,6 +71,21 @@ public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
             List<Obra> obras = mapearObras(resultSet);
             resultSet.close();
             return obras;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Capitulo buscarCapitulo(Integer obra, Integer numeroCapitulo) {
+        try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_OBTER_CAPITULO_OBRA_ESPECIFICA)) {
+            statement.setInt(1, obra);
+            statement.setInt(2, numeroCapitulo);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            Capitulo capitulo = ObraFactory.mapearCapitulo(resultSet);
+            resultSet.close();
+            return capitulo;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -70,7 +70,8 @@ public class ObraQueries {
                     + "obra, "
                     + "titulo, "
                     + "data_criacao, "
-                    + "numero_ordinal  "
+                    + "numero_ordinal, "
+                    + "mimetype "
                     + "FROM capitulo "
                     + "WHERE obra = ? ";
 
@@ -89,4 +90,25 @@ public class ObraQueries {
                     + "AND (descricao LIKE ? OR titulo LIKE ?) "
                     + "ORDER BY obra.id "
                     + "LIMIT ? ";
+
+    protected final String QUERY_ALTERAR_MIMETYPE_CAPITULO =
+            "UPDATE capitulo "
+                    + "SET mimetype = ? "
+                    + "WHERE obra = ? AND id = ? ";
+
+    protected final String QUERY_VERIFICAR_EXISTENCIA_CAPITULO =
+            "SELECT "
+                    + "COUNT(*) AS quantidade "
+                    + "FROM capitulo WHERE id = ? AND obra = ?";
+
+    protected final String QUERY_OBTER_CAPITULO_OBRA_ESPECIFICA =
+            "SELECT "
+                    + "id AS numero, "
+                    + "obra, "
+                    + "titulo, "
+                    + "data_criacao, "
+                    + "numero_ordinal,  "
+                    + "mimetype "
+                    + "FROM capitulo WHERE id = ? AND obra = ?";
 }
+
