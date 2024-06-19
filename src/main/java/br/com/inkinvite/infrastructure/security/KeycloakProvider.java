@@ -10,9 +10,8 @@ import jakarta.inject.Singleton;
 
 @Singleton
 public class KeycloakProvider {
-
     @Inject
-    @ConfigProperty(name = "REALM")
+    @ConfigProperty(name = "URL_ONLY")
     private String serverURL;
 
     @Inject
