@@ -1,5 +1,6 @@
 package br.com.inkinvite.application.repo;
 
+import br.com.inkinvite.domain.obra.Capitulo;
 import br.com.inkinvite.domain.obra.Obra;
 import br.com.inkinvite.domain.obra.ObraCompleta;
 
@@ -15,4 +16,6 @@ public interface ObraRepo {
     ObraCompleta buscarObra(Integer obra);
 
     List<Obra> buscarObras(Integer ultimaObra, String pesquisa, Integer limite);
+
+    Capitulo buscarCapitulo(Integer obra, Integer numeroCapitulo);
 }

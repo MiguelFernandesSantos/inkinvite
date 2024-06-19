@@ -15,4 +15,8 @@ public interface ObraService {
     void novoCapitulo(Capitulo capitulo);
 
     void ordenarCapitulos(Integer obra, Capitulos capitulos);
+
+    void salvarMimeTypeArquivoCapitulo(Integer obra, Integer capitulo, String mimeType);
+
+    void verificarExistenciaCapitulo(Integer obra, Integer numeroCapitulo);
 }
