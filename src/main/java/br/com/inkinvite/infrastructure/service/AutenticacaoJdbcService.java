@@ -36,11 +36,13 @@ public class AutenticacaoJdbcService implements AutenticacaoService {
     }
 
     @Override
-    public void esqueciSenha(String email) {
-        try {
-            validarEsqueciSenha(email);
-        } catch (DominioException e) {
-            throw e;
+    public void esqueciSenha(String login) {
+        try (Keycloak keycloak = keycloakProvider.obterValidacaoAdmin()) {
+            UserRepresentation user = keycloak.realm(keycloakProvider.getRealmName()).users().search(login).stream().findFirst().orElse(null);
+            if (user == null) {
+                throw new UsuarioNaoEncontrado();
+            }
+            keycloak.realm(keycloakProvider.getRealmName()).users().get(user.getId()).executeActionsEmail(Collections.singletonList("UPDATE_PASSWORD"));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -57,18 +59,6 @@ public class AutenticacaoJdbcService implements AutenticacaoService {
             throw new RuntimeException(e);
         }
         return token;
-    }
-
-    public void validarEsqueciSenha(String login) {
-        try (Keycloak keycloak = keycloakProvider.obterValidacaoAdmin()) {
-            UserRepresentation user = keycloak.realm(keycloakProvider.getRealmName()).users().search(login).stream().findFirst().orElse(null);
-            if (user == null) {
-                throw new UsuarioNaoEncontrado();
-            }
-            keycloak.realm(keycloakProvider.getRealmName()).users().get(user.getId()).executeActionsEmail(Collections.singletonList("UPDATE_PASSWORD"));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void tratarErroHttpKeycloak(WebApplicationException keycloakError) {

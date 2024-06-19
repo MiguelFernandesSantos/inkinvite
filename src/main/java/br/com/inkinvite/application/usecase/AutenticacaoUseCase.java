@@ -33,10 +33,10 @@ public class AutenticacaoUseCase extends UseCase {
     }
 
     public void esqueciSenha(String login) {
-        start("Iniciando recuperacao de usuario " + login);
+        start("Iniciando recuperacao de senha do usuario " + login);
         try {
             autenticacaoService.esqueciSenha(login);
-            sucesso("Recuperacao do usuario de titulo " + login + " realizada com sucesso");
+            sucesso("Recuperacao de senha do usuario " + login + " realizada com sucesso");
         } catch (UsuarioNaoEncontrado e){
             erro("O usuario requisitado " + login + " nao pode ser encontrado com estes dados.", e);
             throw e;
