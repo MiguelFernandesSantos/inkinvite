@@ -1,7 +1,10 @@
 package br.com.inkinvite.infrastructure.service;
 
+import java.util.Collections;
+
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.AccessTokenResponse;
+import org.keycloak.representations.idm.UserRepresentation;
 
 import br.com.inkinvite.application.service.AutenticacaoService;
 import br.com.inkinvite.application.service.LogService;
@@ -26,6 +29,21 @@ public class AutenticacaoJdbcService implements AutenticacaoService {
         try {
             return validarLogin(login, senha);
         } catch (DominioException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void esqueciSenha(String credencialUsuario) {
+        try (Keycloak keycloak = keycloakProvider.obterValidacaoAdmin()) {
+            UserRepresentation user = keycloak.realm(keycloakProvider.getRealmName()).users().search(credencialUsuario).stream().findFirst().orElse(null);
+            if (user == null) {
+                throw new UsuarioNaoEncontrado();
+            }
+            keycloak.realm(keycloakProvider.getRealmName()).users().get(user.getId()).executeActionsEmail(Collections.singletonList("UPDATE_PASSWORD"));
+        } catch (UsuarioNaoEncontrado e) {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);

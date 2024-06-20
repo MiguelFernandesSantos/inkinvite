@@ -31,4 +31,21 @@ public class AutenticacaoUseCase extends UseCase {
             throw e;
         }
     }
+
+    public void esqueciSenha(String credencialUsuario) {
+        start("Iniciando recuperacao de senha do usuario " + credencialUsuario);
+        try {
+            autenticacaoService.esqueciSenha(credencialUsuario);
+            sucesso("Recuperacao de senha do usuario " + credencialUsuario + " realizada com sucesso");
+        } catch (UsuarioNaoEncontrado e){
+            erro("O usuario requisitado " + credencialUsuario + " nao pode ser encontrado com estes dados.", e);
+            throw e;
+        } catch (UsuarioInvalido e){
+            erro("O usuario requisitado " + credencialUsuario + " possui dados invalidos.", e);
+            throw e;
+        } catch (Exception e) {
+            erro("Ocorreu um erro ao tentar recuperar o usuario " + credencialUsuario, e);
+            throw e;
+        }
+    }
 }

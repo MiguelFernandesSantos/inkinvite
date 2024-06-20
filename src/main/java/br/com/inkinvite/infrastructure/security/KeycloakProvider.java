@@ -26,6 +26,14 @@ public class KeycloakProvider {
     @ConfigProperty(name = "CLIENT_SECRET")
     private String clientSecret;
 
+    @Inject
+    @ConfigProperty(name = "KC_USERNAME")
+    private String adminLogin;
+
+    @Inject
+    @ConfigProperty(name = "KC_PASSWORD")
+    private String adminSenha;
+
     public Keycloak obterClientKeycloak() {
         return KeycloakBuilder.builder()
             .serverUrl(serverURL)
@@ -44,6 +52,18 @@ public class KeycloakProvider {
                 .clientSecret(clientSecret)
                 .username(login)
                 .password(senha)
+                .grantType(OAuth2Constants.PASSWORD)
+                .build();
+    }
+
+    public Keycloak obterValidacaoAdmin() {
+        return KeycloakBuilder.builder()
+                .serverUrl(serverURL)
+                .realm(realmName)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .username(adminLogin)
+                .password(adminSenha)
                 .grantType(OAuth2Constants.PASSWORD)
                 .build();
     }
