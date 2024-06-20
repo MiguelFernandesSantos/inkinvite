@@ -55,8 +55,14 @@ public class AutenticacaoResources {
     @Path("/esqueci-senha")
     public Response esqueciSenha(Map<String, String> credenciais) {
         try {
-            component.esqueciSenha(credenciais.get("login"));
+            component.esqueciSenha(credenciais.get("username"));
             return Response.status(Response.Status.OK).entity("Reset de senha com sucesso.").type(MediaType.TEXT_PLAIN).build();
+        } catch (UsuarioNaoEncontrado e) {
+            Response response = Response.status(Response.Status.NOT_FOUND)
+                                        .entity(e.toString())
+                                        .type(MediaType.TEXT_PLAIN)
+                                        .build();
+            throw new WebApplicationException(response);
         } catch (Exception e) {
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }

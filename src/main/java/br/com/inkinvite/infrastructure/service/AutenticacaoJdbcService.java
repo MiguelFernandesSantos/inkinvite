@@ -36,13 +36,15 @@ public class AutenticacaoJdbcService implements AutenticacaoService {
     }
 
     @Override
-    public void esqueciSenha(String login) {
+    public void esqueciSenha(String credencialUsuario) {
         try (Keycloak keycloak = keycloakProvider.obterValidacaoAdmin()) {
-            UserRepresentation user = keycloak.realm(keycloakProvider.getRealmName()).users().search(login).stream().findFirst().orElse(null);
+            UserRepresentation user = keycloak.realm(keycloakProvider.getRealmName()).users().search(credencialUsuario).stream().findFirst().orElse(null);
             if (user == null) {
                 throw new UsuarioNaoEncontrado();
             }
             keycloak.realm(keycloakProvider.getRealmName()).users().get(user.getId()).executeActionsEmail(Collections.singletonList("UPDATE_PASSWORD"));
+        } catch (UsuarioNaoEncontrado e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
