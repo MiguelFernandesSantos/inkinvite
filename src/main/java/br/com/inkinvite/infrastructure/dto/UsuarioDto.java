@@ -9,10 +9,4 @@ public class UsuarioDto {
         return Usuario.criar(cabecalho.primeiroNome, cabecalho.segundoNome, cabecalho.login, cabecalho.email, cabecalho.senha);
     }
 
-    public static UsuarioDto deDominio(Usuario usuario) {
-        UsuarioDto dto = new UsuarioDto();
-        dto.cabecalho = CabecalhoUsuarioDto.deDominio(usuario.getCabecalho());
-        return dto;
-    }
-
 }

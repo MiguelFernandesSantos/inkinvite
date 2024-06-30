@@ -1,0 +1,27 @@
+@startuml
+
+left to right direction
+
+package Application {
+
+    class UsuarioComponent {
+        - UsuarioUseCase useCase
+        + void criarUsuario()
+    }
+
+    UsuarioComponent::useCase --> UsuarioUseCase
+
+    class UsuarioUseCase {
+        - UsuarioRepo repo
+        + void criarUsuario()
+    }
+
+    UsuarioUseCase::repo --> UsuarioRepo
+
+    interface UsuarioRepo {
+        + void criarUsuario()
+    }
+
+}
+
+@enduml

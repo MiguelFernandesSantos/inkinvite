@@ -1,0 +1,47 @@
+@startuml
+
+left to right direction
+
+package Interfaces {
+
+    class AutenticacaoResources  {
+        - AutenticacaoComponent component
+        + Response login()
+        + Response esqueciSenha()
+    }
+
+    AutenticacaoResources::component --> AutenticacaoComponent
+
+    class UsuarioResources {
+        - UsuarioComponent component
+        + Response criarUsuario()
+    }
+
+    UsuarioResources::component --> UsuarioComponent
+
+    class ObraController {
+        - ObraComponent component
+        + Response obterObrasMaisRecentes()
+        + Response ordenarCapitulos()
+        + Response adicionarArquivoCapituloObra()
+    }
+
+    ObraController::component --> ObraComponent
+
+    class ObraResources {
+        - ObraComponent component
+        + Response criarObra()
+        + Response buscarObras()
+        + Response obterObra()
+        + Response editarObra()
+        + Response deletarObra()
+        + Response novoCapitulo()
+        + Response obterCapitulo()
+    }
+
+    ObraResources::component --> ObraComponent
+
+
+}
+
+@enduml

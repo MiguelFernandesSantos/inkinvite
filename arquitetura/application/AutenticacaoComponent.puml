@@ -1,0 +1,30 @@
+@startuml
+
+left to right direction
+
+package Application {
+
+    class AutenticacaoComponent {
+        - AutenticacaoUseCase useCase
+        + String recuperarLogin()
+        + void esqueciSenha()
+    }
+
+    AutenticacaoComponent::useCase --> AutenticacaoUseCase
+
+    class AutenticacaoUseCase {
+        - AutenticacaoService autenticacaoService
+        + String recuperarLogin()
+        + void esqueciSenha()
+    }
+
+    AutenticacaoUseCase::autenticacaoService --> AutenticacaoService
+
+    interface AutenticacaoService {
+        + String recuperarLogin()
+        + void esqueciSenha()
+    }
+
+}
+
+@enduml

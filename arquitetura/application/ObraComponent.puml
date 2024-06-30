@@ -1,0 +1,68 @@
+@startuml
+
+left to right direction
+
+package Application {
+
+    class ObraComponent {
+        - ObraUseCase useCase
+        + void criarObra()
+        + void editarObra()
+        + void deletarObra()
+        + List<Obra> buscarObras()
+        + List<Obra> obterObrasMaisRecentes()
+        + ObraCompleta obterObra()
+        + void novoCapitulo()
+        + void ordenarCapitulos()
+        + Capitulo obterCapitulo()
+        + void adicionarArquivoCapitulo()
+    }
+
+    ObraComponent::useCase --> ObraUseCase
+
+    class ObraUseCase {
+        - ObraRepo repo
+        - ObraService obraService
+        - StorageService storageService
+        + void criarObra()
+        + void editarObra()
+        + void deletarObra()
+        + List<Obra> buscarObras()
+        + List<Obra> obterObrasMaisRecentes()
+        + ObraCompleta obterObra()
+        + void novoCapitulo()
+        + void ordenarCapitulos()
+        + Capitulo obterCapitulo()
+        + void adicionarArquivoCapitulo()
+    }
+
+    ObraUseCase::repo --> ObraRepo
+    ObraUseCase::obraService --> ObraService
+    ObraUseCase::storageService --> StorageService
+
+    interface ObraRepo {
+        + void salvar()
+        + void editar()
+        + void deletar()
+        + ObraCompleta buscarObra()
+        + List<Obra> buscarObras()
+        + Capitulo buscarCapitulo()
+    }
+
+    interface ObraService {
+        + List<Obra> obterObrasMaisRecentes()
+        + void verificarExistencia()
+        + void novoCapitulo()
+        + void ordenarCapitulos()
+        + void salvarMimeTypeArquivoCapitulo()
+        + void verificarExistenciaCapitulo()
+    }
+
+    interface StorageService {
+        + void adicionarArquivoCapituloObra()
+        + byte[] buscarArquivoCapituloObra()
+    }
+
+}
+
+@enduml

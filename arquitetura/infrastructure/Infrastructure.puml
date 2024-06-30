@@ -1,0 +1,25 @@
+@startuml
+
+left to right direction
+
+    class Infrastructure.ObraJdbcRepo implements Application.ObraRepo {
+
+    }
+
+    class Infrastructure.UsuarioJdbcRepo implements Application.UsuarioRepo {
+
+    }
+
+    class Infrastructure.AutenticacaoJdbcService implements Application.AutenticacaoService {
+
+    }
+
+    class Infrastructure.ObraJdbcService implements Application.ObraService {
+
+    }
+
+    class Infrastructure.StorageS3Service implements Application.StorageService {
+
+    }
+
+@enduml

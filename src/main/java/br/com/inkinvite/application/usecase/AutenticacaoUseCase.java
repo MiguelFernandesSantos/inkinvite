@@ -2,8 +2,8 @@ package br.com.inkinvite.application.usecase;
 
 import br.com.inkinvite.application.service.AutenticacaoService;
 import br.com.inkinvite.application.service.LogService;
-import br.com.inkinvite.domain.autenticacao.UsuarioInvalido;
-import br.com.inkinvite.domain.autenticacao.UsuarioNaoEncontrado;
+import br.com.inkinvite.domain.usuario.UsuarioInvalido;
+import br.com.inkinvite.domain.usuario.UsuarioNaoEncontrado;
 
 public class AutenticacaoUseCase extends UseCase {
 

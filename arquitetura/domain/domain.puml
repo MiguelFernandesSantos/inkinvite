@@ -1,0 +1,59 @@
+@startuml
+
+left to right direction
+
+package Domain {
+
+    class ObraCompleta<Agregado> extends Obra {
+        - CabecalhoObra cabecalho
+        - Capitulos capitulos
+        - Avaliacao avaliacao
+    }
+
+    ObraCompleta::capitulos --> Capitulos
+    ObraCompleta::avaliacao --> Avaliacao
+
+    class Capitulos <Objeto de valor> {
+        - Map<Integer, Capitulo> capitulosPorOrdinal
+    }
+
+    class Obra <Agregado> {
+        - CabecalhoObra cabecalho
+    }
+
+    Obra::cabecalho --> CabecalhoObra
+
+    class CabecalhoObra <Objeto de valor> {
+        - Integer numeroAutor
+        - String nomeAutor
+        - String titulo
+        - String descricao
+        - StatusObra status
+        - DataHora publicacao
+    }
+
+    CabecalhoObra::status --> StatusObra
+
+    class Avaliacao <Objeto de valor> {
+        - BigDecimal nota
+    }
+
+    enum StatusObra {
+        - CRIADA
+        - EM_ANDAMENTO
+        - FINALIZADA
+        - DESCONHECIDO
+    }
+
+    class Usuario <Entidade> {
+        - String primeiroNome
+        - String segundo nomeAutor
+        - String login
+        - String email
+        - String senha
+        - DataHora criacao
+    }
+
+}
+
+@enduml

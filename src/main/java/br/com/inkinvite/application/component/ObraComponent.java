@@ -51,7 +51,7 @@ public class ObraComponent {
         return useCase.buscarObras(ultimaObra, pesquisa, limite);
     }
 
-    public void adicionarArquivoCapituloObra(Integer obra, Integer capitulo, byte[] bytes,String mimeType ) {
+    public void adicionarArquivoCapituloObra(Integer obra, Integer capitulo, byte[] bytes, String mimeType) {
         useCase.adicionarArquivoCapituloObra(obra, capitulo, bytes, mimeType);
     }
 

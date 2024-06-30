@@ -1,4 +1,4 @@
-package br.com.inkinvite.domain.autenticacao;
+package br.com.inkinvite.domain.usuario;
 
 import br.com.inkinvite.domain.DominioException;
 
