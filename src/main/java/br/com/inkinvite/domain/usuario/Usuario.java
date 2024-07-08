@@ -9,15 +9,17 @@ public class Usuario extends Agregado {
     private String login;
     private String email;
     private String senha;
+    private Boolean eAutor;
     private DataHora criacao;
 
-    public static Usuario criar(String primeiroNome, String segundoNome, String login, String email, String senha) {
+    public static Usuario criar(String primeiroNome, String segundoNome, String login, String email, String senha, Boolean eAutor) {
         Usuario usuario = new Usuario();
         usuario.primeiroNome = primeiroNome;
         usuario.segundoNome = segundoNome;
         usuario.login = login;
         usuario.email = email;
         usuario.senha = senha;
+        usuario.eAutor = eAutor;
         usuario.criacao = DataHora.agora();
         return usuario;
     }
@@ -51,6 +53,10 @@ public class Usuario extends Agregado {
 
     public String getSenha() {
         return senha;
+    }
+
+    public Boolean getEAutor() {
+        return eAutor;
     }
 
     public DataHora getCriacao() {

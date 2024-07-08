@@ -30,7 +30,7 @@ public class UsuarioResources {
     public Response criarUsuario(UsuarioDto usuario) {
         try {
             component.criarUsuario(usuario.paraDominio());
-            return Response.ok().build();
+            return Response.status(Response.Status.CREATED).entity("Usuário criado com sucesso.").type(MediaType.TEXT_PLAIN).build();
         } catch (UsuarioJaExiste e) {
             Response response = Response.status(Response.Status.CONFLICT)
                                         .entity(e.toString())

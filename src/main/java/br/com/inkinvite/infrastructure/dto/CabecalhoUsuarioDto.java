@@ -10,5 +10,5 @@ public class CabecalhoUsuarioDto {
     public String login;
     public String email;
     public String senha;
-
+    public Boolean eAutor;
 }

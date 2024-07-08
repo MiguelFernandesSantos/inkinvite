@@ -1,26 +1,42 @@
 package br.com.inkinvite.interfaces.resources;
 
+import java.util.List;
+
+import org.eclipse.microprofile.openapi.annotations.Operation;
+
 import br.com.inkinvite.application.component.ObraComponent;
 import br.com.inkinvite.application.repo.ObraRepo;
+import br.com.inkinvite.application.service.LogService;
+import br.com.inkinvite.application.service.ObraService;
 import br.com.inkinvite.application.service.StorageService;
-import br.com.inkinvite.domain.obra.*;
+import br.com.inkinvite.domain.obra.Capitulo;
+import br.com.inkinvite.domain.obra.CapituloNaoExiste;
+import br.com.inkinvite.domain.obra.Obra;
+import br.com.inkinvite.domain.obra.ObraCompleta;
+import br.com.inkinvite.domain.obra.ObraNaoExiste;
 import br.com.inkinvite.infrastructure.dto.obra.CapituloDto;
 import br.com.inkinvite.infrastructure.dto.obra.ObraCompletaDto;
 import br.com.inkinvite.infrastructure.dto.obra.ObraDto;
-import br.com.inkinvite.application.service.ObraService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import br.com.inkinvite.application.service.LogService;
-import org.eclipse.microprofile.openapi.annotations.Operation;
-
-import java.util.List;
 
 @RequestScoped
 @Path("/api/obra")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@RolesAllowed("autor")
 public class ObraResources {
 
     final ObraComponent component;

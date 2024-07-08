@@ -5,9 +5,12 @@ import static br.com.inkinvite.infrastructure.repo.MySqlConnection.obterStatemen
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.Collections;
 
+import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import br.com.inkinvite.application.repo.UsuarioRepo;
@@ -54,6 +57,7 @@ public class UsuarioJdbcRepo extends UsuarioQueries implements UsuarioRepo {
                 if (response.getStatus() < 200 || response.getStatus() >= 300) {
                     throw new UsuarioJaExiste();
                 }
+                criarFuncaoParaUsuario(keycloak, usuario.getEAutor(), CreatedResponseUtil.getCreatedId(response));
             }
         }
     }
@@ -64,12 +68,18 @@ public class UsuarioJdbcRepo extends UsuarioQueries implements UsuarioRepo {
             statement.setString(2, usuario.getSegundoNome());
             statement.setString(3, usuario.getLogin());
             statement.setString(4, usuario.getEmail());
-            statement.setString(5, usuario.getSenha());
-            statement.setString(6, usuario.getCriacao("yyyy-MM-dd HH:mm:ss"));
+            statement.setString(5, usuario.getCriacao("yyyy-MM-dd HH:mm:ss"));
             statement.execute();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void criarFuncaoParaUsuario(Keycloak keycloak, boolean eAutor, String idUsuario) {
+        String funcaoUsuario = "nao-autor";
+        if (eAutor) funcaoUsuario = "autor";
+        RoleRepresentation role = keycloak.realm(keycloakProvider.getRealmName()).roles().get(funcaoUsuario).toRepresentation();
+        keycloak.realm(keycloakProvider.getRealmName()).users().get(idUsuario).roles().realmLevel().add(Collections.singletonList(role));
     }
 
 }
