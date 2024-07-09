@@ -19,16 +19,16 @@ public class ObraComponent {
         this.useCase = new ObraUseCase(obraRepo, obraService, storageService, logService);
     }
 
-    public void criarObra(Obra obra) {
-        useCase.criarObra(obra);
+    public void criarObra(Obra obra, String email) {
+        useCase.criarObra(obra, email);
     }
 
-    public void editarObra(Integer numeroObra, Obra obra) {
-        useCase.editarObra(numeroObra, obra);
+    public void editarObra(Integer numeroObra, Obra obra, String email) {
+        useCase.editarObra(numeroObra, obra, email);
     }
 
-    public void deletarObra(Integer numeroObra) {
-        useCase.deletarObra(numeroObra);
+    public void deletarObra(Integer numeroObra, String email) {
+        useCase.deletarObra(numeroObra, email);
     }
 
     public List<Obra> obterObrasMaisRecentes(Integer ultimaObra) {

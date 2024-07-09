@@ -21,7 +21,7 @@ import static br.com.inkinvite.infrastructure.repo.obra.ObraFactory.mapearObra;
 import static br.com.inkinvite.infrastructure.repo.obra.ObraFactory.mapearObras;
 
 @ApplicationScoped
-public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
+public class ObraJdbcRepo extends ObraDataBase implements ObraRepo {
 
     @Inject
     AgroalDataSource banco;
@@ -31,9 +31,10 @@ public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
 
     @Override
     @Transactional
-    public void salvar(Obra obra) {
+    public void salvar(Obra obra, String email) {
         try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_CRIAR_OBRA)) {
-            statement.setInt(1, obra.getNumeroAutor());
+            Integer identificadorAutor = obterIdentificadorAutor(email, conexao);
+            statement.setInt(1, identificadorAutor);
             statement.setString(2, obra.getTitulo());
             statement.setString(3, obra.getDescricao());
             statement.setInt(4, obra.getStatusObra());
@@ -93,9 +94,10 @@ public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
 
     @Override
     @Transactional
-    public void editar(Integer numeroObra, Obra obra) {
+    public void editar(Integer numeroObra, Obra obra, String email) {
         try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, QUERY_EDITAR_OBRA)) {
-            statement.setInt(1, obra.getNumeroAutor());
+            Integer identificadorAutor = obterIdentificadorAutor(email, conexao);
+            statement.setInt(1, identificadorAutor);
             statement.setString(2, obra.getTitulo());
             statement.setString(3, obra.getDescricao());
             statement.setInt(4, obra.getStatusObra());
@@ -117,12 +119,13 @@ public class ObraJdbcRepo extends ObraQueries implements ObraRepo {
         }
     }
 
-    private static void deletarConteudoObra(Integer numeroObra, PreparedStatement statementObras) throws SQLException {
+
+    private void deletarConteudoObra(Integer numeroObra, PreparedStatement statementObras) throws SQLException {
         statementObras.setInt(1, numeroObra);
         statementObras.execute();
     }
 
-    private static String obterLikePesquisa(String pesquisa) {
+    private String obterLikePesquisa(String pesquisa) {
         return "%" + pesquisa + "%";
     }
 }

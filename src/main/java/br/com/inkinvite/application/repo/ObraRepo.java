@@ -7,9 +7,9 @@ import br.com.inkinvite.domain.obra.ObraCompleta;
 import java.util.List;
 
 public interface ObraRepo {
-    void salvar(Obra cabecalhoObra);
+    void salvar(Obra cabecalhoObra, String email);
 
-    void editar(Integer numeroObra, Obra obra);
+    void editar(Integer numeroObra, Obra obra, String email);
 
     void deletar(Integer numeroObra);
 

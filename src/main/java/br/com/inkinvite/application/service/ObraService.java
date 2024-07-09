@@ -19,4 +19,6 @@ public interface ObraService {
     void salvarMimeTypeArquivoCapitulo(Integer obra, Integer capitulo, String mimeType);
 
     void verificarExistenciaCapitulo(Integer obra, Integer numeroCapitulo);
+
+    void verificarCriadorObra(Integer numeroObra, String email);
 }

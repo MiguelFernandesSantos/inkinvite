@@ -110,5 +110,17 @@ public class ObraQueries {
                     + "numero_ordinal,  "
                     + "mimetype "
                     + "FROM capitulo WHERE id = ? AND obra = ?";
+
+    protected final String OBTER_IDENTIFICADOR_AUTOR =
+            "SELECT "
+                    + "id AS identificador "
+                    + " FROM usuario "
+                    + "WHERE email = ? ";
+
+    protected final String VERIFICAR_SE_CRIOU_OBRA =
+            "SELECT "
+                    + "COUNT(*) AS quantidade "
+                    + "FROM obra "
+                    + "WHERE autor = ? AND id = ? ";
 }
 
