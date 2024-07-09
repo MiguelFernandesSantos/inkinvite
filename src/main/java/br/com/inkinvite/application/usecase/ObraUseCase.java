@@ -21,10 +21,10 @@ public class ObraUseCase extends UseCase {
         this.storageService = storageService;
     }
 
-    public void criarObra(Obra obra) {
+    public void criarObra(Obra obra, String email) {
         start("Iniciando criacao da obra de titulo " + obra.getTitulo());
         try {
-            obraRepo.salvar(obra);
+            obraRepo.salvar(obra, email);
             sucesso("Criacao da obra de titulo " + obra.getTitulo() + " realizada com sucesso");
         } catch (Exception e) {
             erro("Ocorreu um erro ao tentar criar a obra de titulo " + obra.getTitulo(), e);
@@ -51,17 +51,21 @@ public class ObraUseCase extends UseCase {
         }
     }
 
-    public void editarObra(Integer numeroObra, Obra obra) {
+    public void editarObra(Integer numeroObra, Obra obra, String email) {
         start("Iniciando edicao da obra de titulo " + obra.getTitulo());
         try {
             info("Verificando existencia da obra de numero " + numeroObra);
             obraService.verificarExistencia(numeroObra);
-            // TODO verificar se é o autor da obra [NECESSARIO JWT]
+            info("Verificando se o usuario pode deletar essa obra");
+            obraService.verificarCriadorObra(numeroObra, email);
             info("Editando a obra de titulo " + obra.getTitulo());
-            obraRepo.editar(numeroObra, obra);
+            obraRepo.editar(numeroObra, obra, email);
             sucesso("Edicao da obra de titulo " + obra.getTitulo() + " realizada com sucesso");
         } catch (ObraNaoExiste e) {
             erro("A obra de numero " + numeroObra + " nao existe", e);
+            throw e;
+        } catch (NaoPermiteEditarObra e) {
+            erro("O usuario de email " + email + " não possui permissão para editar a obra " + numeroObra);
             throw e;
         } catch (Exception e) {
             erro("Ocorreu um erro ao tentar editar a obra de titulo " + obra.getTitulo(), e);
@@ -69,17 +73,21 @@ public class ObraUseCase extends UseCase {
         }
     }
 
-    public void deletarObra(Integer numeroObra) {
+    public void deletarObra(Integer numeroObra, String email) {
         start("Iniciando exclusao da obra de numero " + numeroObra);
         try {
             info("Verificando existencia da obra de numero " + numeroObra);
             obraService.verificarExistencia(numeroObra);
-            // TODO verificar se é o autor da obra [NECESSARIO JWT]
+            info("Verificando se o usuario pode deletar essa obra");
+            obraService.verificarCriadorObra(numeroObra, email);
             info("Excluindo a obra de numero " + numeroObra);
             obraRepo.deletar(numeroObra);
             sucesso("Exclusao da obra de numero " + numeroObra + " realizada com sucesso");
         } catch (ObraNaoExiste e) {
             erro("A obra de numero " + numeroObra + " nao existe", e);
+            throw e;
+        } catch (NaoPermiteEditarObra e) {
+            erro("O usuario de email " + email + " não possui permissão para editar a obra " + numeroObra);
             throw e;
         } catch (Exception e) {
             erro("Ocorreu um erro ao tentar excluir a obra de numero " + numeroObra, e);

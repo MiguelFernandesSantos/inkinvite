@@ -2,6 +2,7 @@ package br.com.inkinvite.interfaces.resources;
 
 import java.util.List;
 
+import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 
 import br.com.inkinvite.application.component.ObraComponent;
@@ -11,14 +12,17 @@ import br.com.inkinvite.application.service.ObraService;
 import br.com.inkinvite.application.service.StorageService;
 import br.com.inkinvite.domain.obra.Capitulo;
 import br.com.inkinvite.domain.obra.CapituloNaoExiste;
+import br.com.inkinvite.domain.obra.NaoPermiteEditarObra;
 import br.com.inkinvite.domain.obra.Obra;
 import br.com.inkinvite.domain.obra.ObraCompleta;
 import br.com.inkinvite.domain.obra.ObraNaoExiste;
 import br.com.inkinvite.infrastructure.dto.obra.CapituloDto;
 import br.com.inkinvite.infrastructure.dto.obra.ObraCompletaDto;
 import br.com.inkinvite.infrastructure.dto.obra.ObraDto;
+import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -36,8 +40,12 @@ import jakarta.ws.rs.core.Response;
 @Path("/api/obra")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@RolesAllowed("autor")
+@Authenticated
 public class ObraResources {
+
+    @Inject
+    @Claim("email")
+    String email;
 
     final ObraComponent component;
 
@@ -48,9 +56,10 @@ public class ObraResources {
 
     @POST
     @Operation(summary = "Cria uma nova obra", description = "Grava no banco de dados o cabecalho da obra.")
+    @RolesAllowed("autor")
     public Response criarObra(ObraDto obra) {
         try {
-            component.criarObra(obra.paraDominio());
+            component.criarObra(obra.paraDominio(), email);
             return Response.ok().build();
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
@@ -58,6 +67,7 @@ public class ObraResources {
     }
 
     @POST
+    @Path("/paginado")
     @Operation(summary = "Busca de forma resumida as obras que existem", description = "Busca no banco de dados as obras que existem e estão de acordo com os parametros.")
     public Response buscarObras(@QueryParam("ultimaObra") Integer ultimaObra, @QueryParam("pesquisa") String pesquisa, @QueryParam("limite") Integer limite) {
         try {
@@ -87,12 +97,15 @@ public class ObraResources {
     @PUT
     @Path("/{numero}")
     @Operation(summary = "Edita uma obra especifica", description = "Altera no banco de dados o cabecalho da obra passada como PathParam.")
+    @RolesAllowed("autor")
     public Response editarObra(@PathParam("numero") Integer numeroObra, ObraDto obra) {
         try {
-            component.editarObra(numeroObra, obra.paraDominio());
+            component.editarObra(numeroObra, obra.paraDominio(), email);
             return Response.ok().build();
         } catch (ObraNaoExiste e) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } catch (NaoPermiteEditarObra e) {
+            throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -101,12 +114,15 @@ public class ObraResources {
     @DELETE
     @Path("/{numero}")
     @Operation(summary = "Deleta uma obra especifica", description = "Deleta do banco de dados a obra passada como PathParam junto de seus capitulos.")
+    @RolesAllowed("autor")
     public Response deletarObra(@PathParam("numero") Integer numeroObra) {
         try {
-            component.deletarObra(numeroObra);
+            component.deletarObra(numeroObra, email);
             return Response.ok().build();
         } catch (ObraNaoExiste e) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } catch (NaoPermiteEditarObra e) {
+            throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -115,6 +131,7 @@ public class ObraResources {
     @POST
     @Path("{obra}/novo-capitulo")
     @Operation(summary = "Adiciona um novo capitulo em uma obra", description = "Adiciona no banco de dados um novo capitulo para a obra informada.")
+    @RolesAllowed("autor")
     public Response novoCapitulo(@PathParam("obra") Integer obra, CapituloDto capituloDto) {
         try {
             component.novoCapitulo(capituloDto.paraDominio());
