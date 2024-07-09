@@ -168,7 +168,7 @@
                 <artifactId>heroku-maven-plugin</artifactId>
                 <version>3.0.3</version>
                 <configuration>
-                <jdkVersion>17</jdkVersion>
+                    <jdkVersion>17</jdkVersion>
                 </configuration>
             </plugin>
         </plugins>
