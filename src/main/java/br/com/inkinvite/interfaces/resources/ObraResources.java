@@ -9,10 +9,12 @@ import br.com.inkinvite.infrastructure.dto.obra.ObraCompletaDto;
 import br.com.inkinvite.infrastructure.dto.obra.ObraDto;
 import br.com.inkinvite.application.service.ObraService;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import br.com.inkinvite.application.service.LogService;
+import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 
 import java.util.List;
@@ -22,6 +24,10 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ObraResources {
+
+    @Inject
+    @Claim("email")
+    String email;
 
     final ObraComponent component;
 
@@ -34,7 +40,7 @@ public class ObraResources {
     @Operation(summary = "Cria uma nova obra", description = "Grava no banco de dados o cabecalho da obra.")
     public Response criarObra(ObraDto obra) {
         try {
-            component.criarObra(obra.paraDominio());
+            component.criarObra(obra.paraDominio(), email);
             return Response.ok().build();
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
@@ -42,6 +48,7 @@ public class ObraResources {
     }
 
     @POST
+    @Path("/paginado")
     @Operation(summary = "Busca de forma resumida as obras que existem", description = "Busca no banco de dados as obras que existem e estão de acordo com os parametros.")
     public Response buscarObras(@QueryParam("ultimaObra") Integer ultimaObra, @QueryParam("pesquisa") String pesquisa, @QueryParam("limite") Integer limite) {
         try {
@@ -73,10 +80,12 @@ public class ObraResources {
     @Operation(summary = "Edita uma obra especifica", description = "Altera no banco de dados o cabecalho da obra passada como PathParam.")
     public Response editarObra(@PathParam("numero") Integer numeroObra, ObraDto obra) {
         try {
-            component.editarObra(numeroObra, obra.paraDominio());
+            component.editarObra(numeroObra, obra.paraDominio(), email);
             return Response.ok().build();
         } catch (ObraNaoExiste e) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } catch (NaoPermiteEditarObra e) {
+            throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -87,10 +96,12 @@ public class ObraResources {
     @Operation(summary = "Deleta uma obra especifica", description = "Deleta do banco de dados a obra passada como PathParam junto de seus capitulos.")
     public Response deletarObra(@PathParam("numero") Integer numeroObra) {
         try {
-            component.deletarObra(numeroObra);
+            component.deletarObra(numeroObra, email);
             return Response.ok().build();
         } catch (ObraNaoExiste e) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } catch (NaoPermiteEditarObra e) {
+            throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }

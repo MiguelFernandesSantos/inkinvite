@@ -5,7 +5,7 @@ import br.com.inkinvite.application.service.ObraService;
 import br.com.inkinvite.domain.DominioException;
 import br.com.inkinvite.domain.objetosDeValor.DataHora;
 import br.com.inkinvite.domain.obra.*;
-import br.com.inkinvite.infrastructure.repo.obra.ObraQueries;
+import br.com.inkinvite.infrastructure.repo.obra.ObraDataBase;
 import io.agroal.api.AgroalDataSource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -21,7 +21,7 @@ import static br.com.inkinvite.infrastructure.repo.MySqlConnection.obterStatemen
 import static br.com.inkinvite.infrastructure.repo.obra.ObraFactory.mapearObras;
 
 @ApplicationScoped
-public class ObraJdbcService extends ObraQueries implements ObraService {
+public class ObraJdbcService extends ObraDataBase implements ObraService {
     @Inject
     AgroalDataSource banco;
 
@@ -105,9 +105,26 @@ public class ObraJdbcService extends ObraQueries implements ObraService {
             statement.setInt(2, numeroCapitulo);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            Integer quantidade = resultSet.getInt("quantidade");
+            int quantidade = resultSet.getInt("quantidade");
             resultSet.close();
             if (quantidade == 0) throw new CapituloNaoExiste();
+        } catch (DominioException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void verificarCriadorObra(Integer numeroObra, String email) {
+        try (Connection conexao = banco.getConnection(); PreparedStatement statement = obterStatement(conexao, VERIFICAR_SE_CRIOU_OBRA)) {
+            Integer identificadorAutor = obterIdentificadorAutor(email, conexao);
+            statement.setInt(1, identificadorAutor);
+            statement.setInt(2, numeroObra);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            int quantidade = resultSet.getInt("quantidade");
+            if (quantidade == 0) throw new NaoPermiteEditarObra();
         } catch (DominioException e) {
             throw e;
         } catch (Exception e) {
