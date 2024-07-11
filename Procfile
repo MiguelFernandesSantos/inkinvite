@@ -1,1 +1,1 @@
-web: java -jar target/inkinvite-1.0.0-runner.jar
+web: java -jar -Dserver.port=$PORT target/inkinvite-1.0.0-runner.jar
