@@ -5,10 +5,12 @@ import br.com.inkinvite.domain.usuario.Usuario;
 import br.com.inkinvite.domain.usuario.UsuarioJaExiste;
 import br.com.inkinvite.mock.LogMockService;
 import br.com.inkinvite.mock.usuario.UsuarioMockRepo;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@QuarkusTest
 public class UsuarioTest {
 
     final UsuarioComponent component = new UsuarioComponent(

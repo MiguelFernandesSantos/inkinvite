@@ -6,12 +6,14 @@ import br.com.inkinvite.mock.LogMockService;
 import br.com.inkinvite.mock.obra.ObraMockRepo;
 import br.com.inkinvite.mock.obra.ObraMockService;
 import br.com.inkinvite.mock.obra.StorageMockService;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@QuarkusTest
 public class ObraTest {
 
     final ObraComponent component = new ObraComponent(

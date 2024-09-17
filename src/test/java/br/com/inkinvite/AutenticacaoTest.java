@@ -5,10 +5,12 @@ import br.com.inkinvite.domain.usuario.UsuarioInvalido;
 import br.com.inkinvite.domain.usuario.UsuarioNaoEncontrado;
 import br.com.inkinvite.mock.LogMockService;
 import br.com.inkinvite.mock.autenticacao.AutenticacaoMockService;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@QuarkusTest
 public class AutenticacaoTest {
 
     final AutenticacaoComponent component = new AutenticacaoComponent(
