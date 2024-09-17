@@ -70,4 +70,8 @@ public class Capitulo extends Entidade {
     public void adicionarByteArquivos(byte[] bytes) {
         this.arquivo = bytes;
     }
+
+    public void setObra(Integer obra) {
+        this.obra = obra;
+    }
 }

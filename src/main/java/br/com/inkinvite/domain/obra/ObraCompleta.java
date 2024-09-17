@@ -10,7 +10,7 @@ public class ObraCompleta extends Obra {
     private Avaliacao avaliacao;
     private Capitulos capitulos;
 
-    private ObraCompleta() {
+    public ObraCompleta() {
     }
 
     public static ObraCompleta carregar(Integer numeroObra, Integer numeroAutor, String autor, String titulo, String descricao, Integer statusObra, Avaliacao avaliacao, DataHora publicacao, List<Capitulo> capitulos) {
@@ -29,5 +29,6 @@ public class ObraCompleta extends Obra {
     public List<Capitulo> getCapitulos() {
         return capitulos.obterCapitulos();
     }
+
 }
 

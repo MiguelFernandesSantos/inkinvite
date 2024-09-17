@@ -51,4 +51,8 @@ public class Obra extends Agregado {
         return cabecalho.getPublicacao(formato);
     }
 
+    public void setNumero(Integer numero) {
+        this.numero = numero;
+    }
+
 }
