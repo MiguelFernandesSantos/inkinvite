@@ -47,7 +47,11 @@ public class ObraMockService implements ObraService {
 
     @Override
     public void verificarExistenciaCapitulo(Integer obra, Integer numeroCapitulo) {
-
+        if (obra == 404) {
+            throw new ObraNaoExiste();
+        } else if (numeroCapitulo == 404) {
+            throw new CapituloNaoExiste();
+        }
     }
 
     @Override

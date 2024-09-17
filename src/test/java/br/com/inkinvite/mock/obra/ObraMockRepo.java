@@ -5,6 +5,7 @@ import br.com.inkinvite.domain.obra.Capitulo;
 import br.com.inkinvite.domain.obra.Obra;
 import br.com.inkinvite.domain.obra.ObraCompleta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ObraMockRepo implements ObraRepo {
@@ -24,7 +25,6 @@ public class ObraMockRepo implements ObraRepo {
 
     @Override
     public void deletar(Integer numeroObra) {
-
     }
 
     @Override
@@ -36,11 +36,17 @@ public class ObraMockRepo implements ObraRepo {
 
     @Override
     public List<Obra> buscarObras(Integer ultimaObra, String pesquisa, Integer limite) {
-        return null;
+        List<Obra> obras = new ArrayList<>();
+        for (int i = 0; i < limite; i++) {
+            Obra obra = new Obra();
+            obra.setNumero(ultimaObra + i);
+            obras.add(obra);
+        }
+        return obras;
     }
 
     @Override
     public Capitulo buscarCapitulo(Integer obra, Integer numeroCapitulo) {
-        return null;
+        return Capitulo.carregar(numeroCapitulo, obra, "titulo", null, 1, null, null);
     }
 }
