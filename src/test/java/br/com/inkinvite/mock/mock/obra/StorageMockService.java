@@ -1,4 +1,4 @@
-package br.com.inkinvite.mock.obra;
+package br.com.inkinvite.mock.mock.obra;
 
 import br.com.inkinvite.application.service.StorageService;
 

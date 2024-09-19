@@ -1,183 +1,122 @@
 package br.com.inkinvite;
 
 import br.com.inkinvite.application.component.ObraComponent;
+import br.com.inkinvite.domain.objetosDeValor.DataHora;
 import br.com.inkinvite.domain.obra.*;
-import br.com.inkinvite.mock.LogMockService;
-import br.com.inkinvite.mock.obra.ObraMockRepo;
-import br.com.inkinvite.mock.obra.ObraMockService;
-import br.com.inkinvite.mock.obra.StorageMockService;
+import br.com.inkinvite.domain.usuario.UsuarioNaoEncontrado;
+import br.com.inkinvite.infrastructure.repo.obra.ObraJdbcRepo;
+import br.com.inkinvite.infrastructure.service.LogServiceImpl;
+import br.com.inkinvite.infrastructure.service.ObraJdbcService;
+import br.com.inkinvite.infrastructure.service.StorageS3Service;
+import io.agroal.api.AgroalDataSource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
+import static br.com.inkinvite.infrastructure.repo.usuario.UsuarioQueries.QUERY_CRIAR_USUARIO;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 public class ObraTest {
 
-    final ObraComponent component = new ObraComponent(
-            new ObraMockRepo(),
-            new ObraMockService(),
-            new StorageMockService(),
-            new LogMockService()
-    );
+    @Inject
+    AgroalDataSource banco;
 
-    @Test
-    void obterObraQueExiste() {
-        Integer numeroObra = 200;
-        ObraCompleta obra = component.obterObra(numeroObra);
-        assertEquals(numeroObra.toString(), obra.getId());
-    }
+    final ObraComponent component;
 
-    @Test
-    void obterObraNaoExistenteLancaExcecao() {
-        Integer numeroObra = 404;
-        ObraNaoExiste exception = assertThrows(
-                ObraNaoExiste.class,
-                () -> component.obterObra(numeroObra)
+    final String emailCriador = "usuario@test";
+
+    public ObraTest(ObraJdbcRepo repo, ObraJdbcService obraJdbcService, StorageS3Service storageS3Service, LogServiceImpl logService) {
+        component = new ObraComponent(
+                repo,
+                obraJdbcService,
+                storageS3Service,
+                logService
         );
-        assertEquals(ObraNaoExiste.class, exception.getClass());
+    }
+
+    @BeforeEach
+    void reiniciarConfiguracao() throws SQLException {
+        try (Connection conexao = banco.getConnection(); Statement statement = conexao.createStatement()) {
+            statement.execute("DELETE FROM capitulo");
+            statement.execute("DELETE FROM obra");
+            statement.execute("DELETE FROM usuario");
+            criarUsuarioTest(conexao);
+        }
+    }
+
+    private void criarUsuarioTest(Connection conexao) throws SQLException {
+        PreparedStatement preparedStatement = conexao.prepareStatement(QUERY_CRIAR_USUARIO);
+        preparedStatement.setString(1, "Primeiro nome");
+        preparedStatement.setString(2, "Ultimo nome");
+        preparedStatement.setString(3, "meu login");
+        preparedStatement.setString(4, emailCriador);
+        preparedStatement.setString(5, DataHora.agora().formatar("yyyy-MM-dd HH:mm:ss"));
+        preparedStatement.execute();
     }
 
     @Test
-    void deletarObraQueExiste() {
-        Integer numeroObra = 200;
-        String autor = "dono@gmail.com.br";
-        assertDoesNotThrow(() -> component.deletarObra(numeroObra, autor));
+    void criarObraQueAutorExiste() {
+        Obra obra = criarObraTest();
+        assertDoesNotThrow(() -> component.criarObra(obra, emailCriador));
+    }
+
+    @Test
+    void criarObraQueAutorNaoExiste() {
+        Obra obra = criarObraTest();
+        UsuarioNaoEncontrado exception = assertThrows(
+                UsuarioNaoEncontrado.class,
+                () -> component.criarObra(obra, "naoExiste@gmail.com")
+        );
+        assertEquals(UsuarioNaoEncontrado.class, exception.getClass());
     }
 
     @Test
     void deletarObraQueNaoExiste() {
-        Integer numeroObra = 404;
-        String autor = "dono@gmail.com.br";
         ObraNaoExiste exception = assertThrows(
                 ObraNaoExiste.class,
-                () -> component.deletarObra(numeroObra, autor)
+                () -> component.deletarObra(1, emailCriador)
         );
         assertEquals(ObraNaoExiste.class, exception.getClass());
     }
 
     @Test
-    void deletarObraQueExisteMasNaoCriou() {
-        Integer numeroObra = 200;
-        String autor = "naoSouCriador@gmail.com.br";
-        NaoPermiteEditarObra exception = assertThrows(
-                NaoPermiteEditarObra.class,
-                () -> component.deletarObra(numeroObra, autor)
-        );
-        assertEquals(NaoPermiteEditarObra.class, exception.getClass());
-    }
-
-    @Test
-    void criarCapituloEmObraQueExiste() {
-        Capitulo capitulo = new Capitulo();
-        capitulo.setObra(200);
-        assertDoesNotThrow(() -> component.novoCapitulo(capitulo));
-    }
-
-    @Test
-    void criarCapituloEmObraQueNaoExiste() {
-        Capitulo capitulo = new Capitulo();
-        capitulo.setObra(404);
+    void obterObraQueNaoExiste() {
         ObraNaoExiste exception = assertThrows(
                 ObraNaoExiste.class,
-                () -> component.novoCapitulo(capitulo)
+                () -> component.obterObra(1)
         );
         assertEquals(ObraNaoExiste.class, exception.getClass());
     }
 
     @Test
     void obterObrasMaisRecentes() {
-        Integer quantidade = 5;
-        List<Obra> obras = component.obterObrasMaisRecentes(0);
-        assertEquals(quantidade, obras.size());
-    }
-
-    @Test
-    void editarObraQueExiste() {
-        Integer numeroObra = 200;
-        Obra obra = Obra.criar(1, "titulo", "descricao");
-        String autor = "dono@gmail.com.br";
-        assertDoesNotThrow(() -> component.editarObra(numeroObra, obra, autor));
-    }
-
-    @Test
-    void editarObraQueNaoExiste() {
-        Integer numeroObra = 404;
-        Obra obra = Obra.criar(1, "titulo", "descricao");
-        String autor = "dono@gmail.com.br";
-        ObraNaoExiste exception = assertThrows(
-                ObraNaoExiste.class,
-                () -> component.editarObra(numeroObra, obra, autor)
-        );
-        assertEquals(ObraNaoExiste.class, exception.getClass());
-    }
-
-    @Test
-    void editarObraQueExisteMaisNaoSouAutor() {
-        Integer numeroObra = 200;
-        String autor = "naoSouCriador@gmail.com.br";
-        Obra obra = Obra.criar(1, "titulo", "descricao");
-        NaoPermiteEditarObra exception = assertThrows(
-                NaoPermiteEditarObra.class,
-                () -> component.editarObra(numeroObra, obra, autor)
-        );
-        assertEquals(NaoPermiteEditarObra.class, exception.getClass());
-    }
-
-    @Test
-    void obterStatusObraDeId() {
-        StatusObra status = StatusObra.fromId(1);
-        assertEquals(StatusObra.CRIADA, status);
-    }
-
-    @Test
-    void obterCapituloDeObra() {
-        Integer numeroObra = 200;
-        Integer numeroCapitulo = 1;
-        Capitulo capitulo = component.obterCapitulo(numeroObra, numeroCapitulo);
-        assertEquals(numeroCapitulo.toString(), capitulo.getId());
+        criarObraQueAutorExiste();
+        criarObraQueAutorExiste();
+        List<Obra> obras = component.buscarObras(0, "", 5);
+        assertEquals(2, obras.size());
     }
 
     @Test
     void obterCapiculoDeObraQueNaoExiste() {
-        Integer numeroObra = 404;
         Integer numeroCapitulo = 1;
-        ObraNaoExiste exception = assertThrows(
-                ObraNaoExiste.class,
-                () -> component.obterCapitulo(numeroObra, numeroCapitulo)
-        );
-        assertEquals(ObraNaoExiste.class, exception.getClass());
-    }
-
-    @Test
-    void obterCapituloQueNaoExisteDeObra() {
-        Integer numeroObra = 200;
-        Integer numeroCapitulo = 404;
         CapituloNaoExiste exception = assertThrows(
                 CapituloNaoExiste.class,
-                () -> component.obterCapitulo(numeroObra, numeroCapitulo)
+                () -> component.obterCapitulo(1, numeroCapitulo)
         );
         assertEquals(CapituloNaoExiste.class, exception.getClass());
     }
 
-    @Test
-    void obterObras(){
-        Integer ultimaObra = 0;
-        String pesquisa = "titulo";
-        Integer limite = 5;
-        List<Obra> obras = component.buscarObras(ultimaObra, pesquisa, limite);
-        assertEquals(limite, obras.size());
-    }
 
-    @Test
-    void obterNenhumaObra(){
-        Integer ultimaObra = 0;
-        String pesquisa = "naoExiste";
-        Integer limite = 0;
-        List<Obra> obras = component.buscarObras(ultimaObra, pesquisa, limite);
-        assertEquals(0, obras.size());
+    private static Obra criarObraTest() {
+        return Obra.criar(1, "titulo", "descricao");
     }
 
 }

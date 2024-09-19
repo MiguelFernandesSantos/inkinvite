@@ -2,6 +2,7 @@ package br.com.inkinvite.infrastructure.repo.obra;
 
 import br.com.inkinvite.application.repo.ObraRepo;
 import br.com.inkinvite.application.service.LogService;
+import br.com.inkinvite.domain.DominioException;
 import br.com.inkinvite.domain.obra.Capitulo;
 import br.com.inkinvite.domain.obra.Obra;
 import br.com.inkinvite.domain.obra.ObraCompleta;
@@ -40,6 +41,8 @@ public class ObraJdbcRepo extends ObraDataBase implements ObraRepo {
             statement.setInt(4, obra.getStatusObra());
             statement.setString(5, obra.getPublicacao("yyyy-MM-dd HH:mm:ss"));
             statement.execute();
+        } catch (DominioException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

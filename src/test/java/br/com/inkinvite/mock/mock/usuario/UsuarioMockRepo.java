@@ -1,4 +1,4 @@
-package br.com.inkinvite.mock.usuario;
+package br.com.inkinvite.mock.mock.usuario;
 
 import br.com.inkinvite.application.repo.UsuarioRepo;
 import br.com.inkinvite.domain.usuario.Usuario;

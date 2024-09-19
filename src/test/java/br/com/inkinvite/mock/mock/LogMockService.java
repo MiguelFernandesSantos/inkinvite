@@ -1,4 +1,4 @@
-package br.com.inkinvite.mock;
+package br.com.inkinvite.mock.mock;
 
 import br.com.inkinvite.application.service.LogService;
 

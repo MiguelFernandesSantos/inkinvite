@@ -1,10 +1,10 @@
-package br.com.inkinvite;
+package br.com.inkinvite.mock;
 
 import br.com.inkinvite.application.component.AutenticacaoComponent;
 import br.com.inkinvite.domain.usuario.UsuarioInvalido;
 import br.com.inkinvite.domain.usuario.UsuarioNaoEncontrado;
-import br.com.inkinvite.mock.LogMockService;
-import br.com.inkinvite.mock.autenticacao.AutenticacaoMockService;
+import br.com.inkinvite.mock.mock.LogMockService;
+import br.com.inkinvite.mock.mock.autenticacao.AutenticacaoMockService;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 

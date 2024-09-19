@@ -1,4 +1,4 @@
-package br.com.inkinvite.mock.autenticacao;
+package br.com.inkinvite.mock.mock.autenticacao;
 
 import br.com.inkinvite.application.service.AutenticacaoService;
 import br.com.inkinvite.domain.usuario.UsuarioInvalido;
