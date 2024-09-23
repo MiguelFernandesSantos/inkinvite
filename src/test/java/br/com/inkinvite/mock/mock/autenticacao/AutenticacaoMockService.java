@@ -26,6 +26,8 @@ public class AutenticacaoMockService implements AutenticacaoService {
     private static void validarUsuario(String login, String senha) {
         if (Objects.equals(login, "naoExiste@gmail.com")) {
             throw new UsuarioNaoEncontrado();
+        } else if (Objects.equals(login, "erroGenerico@gmail.com")) {
+            throw new RuntimeException();
         } else if (Objects.equals(senha, "senhaIncorreta")) {
             throw new UsuarioInvalido();
         }

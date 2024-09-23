@@ -11,6 +11,8 @@ public class UsuarioMockRepo implements UsuarioRepo {
     public void salvar(Usuario cabecalhoUsuario) {
         if (Objects.equals(cabecalhoUsuario.getEmail(), "jaExiste@gmail.com")) {
             throw new UsuarioJaExiste();
+        } else if (Objects.equals(cabecalhoUsuario.getEmail(), "erroGenerico@gmail.com")) {
+            throw new RuntimeException();
         }
     }
 }

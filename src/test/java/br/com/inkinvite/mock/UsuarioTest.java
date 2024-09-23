@@ -1,6 +1,7 @@
 package br.com.inkinvite.mock;
 
 import br.com.inkinvite.application.component.UsuarioComponent;
+import br.com.inkinvite.domain.DominioException;
 import br.com.inkinvite.domain.usuario.Usuario;
 import br.com.inkinvite.domain.usuario.UsuarioJaExiste;
 import br.com.inkinvite.mock.mock.LogMockService;
@@ -34,6 +35,17 @@ public class UsuarioTest {
                 () -> component.criarUsuario(usuario)
         );
         assertEquals(UsuarioJaExiste.class, exception.getClass());
+    }
+
+    @Test
+    void salvarUsuarioComErroGenerico() {
+        String email = "erroGenerico@gmail.com";
+        Usuario usuario = criarUsuarioMock(email);
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> component.criarUsuario(usuario)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
     }
 
     Usuario criarUsuarioMock(String email) {

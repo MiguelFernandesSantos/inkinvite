@@ -32,7 +32,9 @@ public class ObraMockService implements ObraService {
 
     @Override
     public void novoCapitulo(Capitulo capitulo) {
-
+        if (capitulo.getObra() == 500) {
+            throw new RuntimeException("Erro genérico");
+        }
     }
 
     @Override

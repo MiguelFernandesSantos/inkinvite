@@ -1,6 +1,7 @@
 package br.com.inkinvite.mock;
 
 import br.com.inkinvite.application.component.AutenticacaoComponent;
+import br.com.inkinvite.domain.DominioException;
 import br.com.inkinvite.domain.usuario.UsuarioInvalido;
 import br.com.inkinvite.domain.usuario.UsuarioNaoEncontrado;
 import br.com.inkinvite.mock.mock.LogMockService;
@@ -38,6 +39,17 @@ public class AutenticacaoTest {
     }
 
     @Test
+    void autenticarComErroGenerico(){
+        String usuario = "erroGenerico@gmail.com";
+        String senha = "senha123";
+        Exception exception = assertThrows(
+                RuntimeException.class,
+                () -> component.recuperarLogin(usuario, senha)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
+    }
+
+    @Test
     void autenticarUsuarioComSenhaIncorreta() {
         String usuario = "emailQueExiste@gmail.com";
         String senha = "senhaIncorreta";
@@ -62,6 +74,16 @@ public class AutenticacaoTest {
                 () -> component.esqueciSenha(usuario)
         );
         assertEquals(UsuarioNaoEncontrado.class, exception.getClass());
+    }
+
+    @Test
+    void esqueciSenhaComErroGenerico() {
+        String usuario = "erroGenerico@gmail.com";
+        Exception exception = assertThrows(
+                RuntimeException.class,
+                () -> component.esqueciSenha(usuario)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
     }
 
 }

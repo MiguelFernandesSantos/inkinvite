@@ -20,15 +20,17 @@ public class ObraMockRepo implements ObraRepo {
 
     @Override
     public void editar(Integer numeroObra, Obra obra, String email) {
-
+        if (numeroObra == 500) throw new RuntimeException("Erro genérico");
     }
 
     @Override
     public void deletar(Integer numeroObra) {
+        if (numeroObra == 500) throw new RuntimeException("Erro genérico");
     }
 
     @Override
     public ObraCompleta buscarObra(Integer obra) {
+        if (obra == 500) throw new RuntimeException("Erro genérico");
         ObraCompleta obraObtida = new ObraCompleta();
         obraObtida.setNumero(obra);
         return obraObtida;
@@ -47,6 +49,7 @@ public class ObraMockRepo implements ObraRepo {
 
     @Override
     public Capitulo buscarCapitulo(Integer obra, Integer numeroCapitulo) {
+        if (obra == 500) throw new RuntimeException("Erro genérico");
         return Capitulo.carregar(numeroCapitulo, obra, "titulo", null, 1, null, null);
     }
 }

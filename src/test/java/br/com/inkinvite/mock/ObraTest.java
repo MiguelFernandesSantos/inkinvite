@@ -1,6 +1,7 @@
 package br.com.inkinvite.mock;
 
 import br.com.inkinvite.application.component.ObraComponent;
+import br.com.inkinvite.domain.DominioException;
 import br.com.inkinvite.domain.obra.*;
 import br.com.inkinvite.mock.mock.LogMockService;
 import br.com.inkinvite.mock.mock.obra.ObraMockRepo;
@@ -41,6 +42,16 @@ public class ObraTest {
     }
 
     @Test
+    void obterObraComErroGenerico() {
+        Integer numeroObra = 500;
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> component.obterObra(numeroObra)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
+    }
+
+    @Test
     void deletarObraQueExiste() {
         Integer numeroObra = 200;
         String autor = "dono@gmail.com.br";
@@ -56,6 +67,17 @@ public class ObraTest {
                 () -> component.deletarObra(numeroObra, autor)
         );
         assertEquals(ObraNaoExiste.class, exception.getClass());
+    }
+
+    @Test
+    void deletarObraComErroGenerico() {
+        Integer numeroObra = 500;
+        String autor = "dono@gmail.com.br";
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> component.deletarObra(numeroObra, autor)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
     }
 
     @Test
@@ -88,6 +110,17 @@ public class ObraTest {
     }
 
     @Test
+    void criarCapituloComErroGenerico() {
+        Capitulo capitulo = new Capitulo();
+        capitulo.setObra(500);
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> component.novoCapitulo(capitulo)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
+    }
+
+    @Test
     void obterObrasMaisRecentes() {
         Integer quantidade = 5;
         List<Obra> obras = component.obterObrasMaisRecentes(0);
@@ -112,6 +145,18 @@ public class ObraTest {
                 () -> component.editarObra(numeroObra, obra, autor)
         );
         assertEquals(ObraNaoExiste.class, exception.getClass());
+    }
+
+    @Test
+    void editarObraComErroGenerico() {
+        Integer numeroObra = 500;
+        Obra obra = Obra.criar(1, "titulo", "descricao");
+        String autor = "dono@gmail.com.br";
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> component.editarObra(numeroObra, obra, autor)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
     }
 
     @Test
@@ -163,7 +208,18 @@ public class ObraTest {
     }
 
     @Test
-    void obterObras(){
+    void obterCapituloComErroGenerico() {
+        Integer numeroObra = 500;
+        Integer numeroCapitulo = 1;
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> component.obterCapitulo(numeroObra, numeroCapitulo)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
+    }
+
+    @Test
+    void obterObras() {
         Integer ultimaObra = 0;
         String pesquisa = "titulo";
         Integer limite = 5;
@@ -172,7 +228,7 @@ public class ObraTest {
     }
 
     @Test
-    void obterNenhumaObra(){
+    void obterNenhumaObra() {
         Integer ultimaObra = 0;
         String pesquisa = "naoExiste";
         Integer limite = 0;
