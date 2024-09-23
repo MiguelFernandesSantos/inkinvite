@@ -3,6 +3,8 @@ package br.com.inkinvite.mock;
 import br.com.inkinvite.application.component.ObraComponent;
 import br.com.inkinvite.domain.DominioException;
 import br.com.inkinvite.domain.obra.*;
+import br.com.inkinvite.infrastructure.dto.obra.ObraCompletaDto;
+import br.com.inkinvite.infrastructure.dto.obra.ObraDto;
 import br.com.inkinvite.mock.mock.LogMockService;
 import br.com.inkinvite.mock.mock.obra.ObraMockRepo;
 import br.com.inkinvite.mock.mock.obra.ObraMockService;
@@ -128,6 +130,16 @@ public class ObraTest {
     }
 
     @Test
+    void obterObrasMaisRecentesComErroGenerico() {
+        Integer quantidade = 500;
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> component.obterObrasMaisRecentes(500)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
+    }
+
+    @Test
     void editarObraQueExiste() {
         Integer numeroObra = 200;
         Obra obra = Obra.criar(1, "titulo", "descricao");
@@ -228,12 +240,104 @@ public class ObraTest {
     }
 
     @Test
+    void buscarObrasComErroGenerico() {
+        Integer ultimaObra = 500;
+        String pesquisa = "erroGenerico";
+        Integer limite = 5;
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> component.buscarObras(ultimaObra, pesquisa, limite)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
+    }
+
+    @Test
     void obterNenhumaObra() {
         Integer ultimaObra = 0;
         String pesquisa = "naoExiste";
         Integer limite = 0;
         List<Obra> obras = component.buscarObras(ultimaObra, pesquisa, limite);
         assertEquals(0, obras.size());
+    }
+
+    @Test
+    void obraSimplesParaDominio() {
+        Integer ultimaObra = 0;
+        String pesquisa = "titulo";
+        Integer limite = 5;
+        List<Obra> obras = component.buscarObras(ultimaObra, pesquisa, limite);
+        List<ObraDto> dtos = obras.stream().map(ObraDto::deDominio).toList();
+        obras = dtos.stream().map(ObraDto::paraDominio).toList();
+        assertEquals(limite, obras.size());
+    }
+
+    @Test
+    void obraCompletadominioParaDto() {
+        Integer numeroObra = 200;
+        ObraCompleta obra = component.obterObra(numeroObra);
+        ObraCompletaDto dto = ObraCompletaDto.deDominio(obra);
+        assertEquals(obra.getId(), dto.numero.toString());
+    }
+
+    @Test
+    void adicionarArquivoCapituloObra() {
+        Integer numeroObra = 200;
+        Integer numeroCapitulo = 1;
+        byte[] bytes = "Hello world".getBytes();
+        assertDoesNotThrow(() -> component.adicionarArquivoCapituloObra(numeroObra, numeroCapitulo, bytes, "png"));
+    }
+
+    @Test
+    void adicionarArquivoCapituloObraEmCapituloQueNaoExiste() {
+        Integer numeroObra = 200;
+        Integer numeroCapitulo = 404;
+        byte[] bytes = "Hello world".getBytes();
+        CapituloNaoExiste exception = assertThrows(
+                CapituloNaoExiste.class,
+                () -> component.adicionarArquivoCapituloObra(numeroObra, numeroCapitulo, bytes, "png")
+        );
+        assertEquals(CapituloNaoExiste.class, exception.getClass());
+    }
+
+    @Test
+    void adicionarArquivoCapituloObraComErroGenerico() {
+        Integer numeroObra = 500;
+        Integer numeroCapitulo = 1;
+        byte[] bytes = "".getBytes();
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> component.adicionarArquivoCapituloObra(numeroObra, numeroCapitulo, bytes, "png")
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
+    }
+
+    @Test
+    void ordenarCapitulos() {
+        Integer numeroObra = 200;
+        ObraCompleta obra = component.obterObra(numeroObra);
+        assertDoesNotThrow(() -> component.ordenarCapitulos(obra.numero, obra.obterCapitulos()));
+    }
+
+    @Test
+    void ordenarCapitulosEmObraQueNaoExiste(){
+        Integer numeroObra = 404;
+        Capitulos capitulos = new Capitulos();
+        ObraNaoExiste exception = assertThrows(
+                ObraNaoExiste.class,
+                () -> component.ordenarCapitulos(numeroObra, capitulos)
+        );
+        assertEquals(ObraNaoExiste.class, exception.getClass());
+    }
+
+    @Test
+    void ordenarCapitulosComErroGenerico(){
+        Integer numeroObra = 500;
+        Capitulos capitulos = new Capitulos();
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> component.ordenarCapitulos(numeroObra, capitulos)
+        );
+        assertNotEquals(DominioException.class, exception.getClass());
     }
 
 }

@@ -26,9 +26,14 @@ public class ObraCompleta extends Obra {
         return avaliacao != null ? avaliacao.obterValorAvaliacao() : null;
     }
 
-    public List<Capitulo> getCapitulos() {
+    public List<Capitulo> obterListaCapitulos() {
         return capitulos.obterCapitulos();
     }
+
+    public Capitulos obterCapitulos() {
+        return capitulos;
+    }
+
 
 }
 

@@ -14,6 +14,7 @@ public class ObraMockService implements ObraService {
 
     @Override
     public List<Obra> obterObrasMaisRecentes(Integer ultimaObra) {
+        if (ultimaObra >= 500) throw new RuntimeException("Erro genérico");
         List<Obra> obras = new ArrayList<>();
         obras.add(new Obra());
         obras.add(new Obra());
@@ -39,7 +40,9 @@ public class ObraMockService implements ObraService {
 
     @Override
     public void ordenarCapitulos(Integer obra, Capitulos capitulos) {
-
+        if (obra == 500) {
+            throw new RuntimeException("Erro genérico");
+        }
     }
 
     @Override

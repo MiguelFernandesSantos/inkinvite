@@ -9,7 +9,7 @@ public class StorageMockService implements StorageService {
 
     @Override
     public void adicionarArquivoCapituloObra(Integer obra, Integer capitulo, byte[] bytes, String mimeType) {
-
+        if (bytes.length == 0) throw new RuntimeException("Arquivo vazio");
     }
 
     @Override

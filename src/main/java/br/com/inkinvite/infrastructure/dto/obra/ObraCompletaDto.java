@@ -11,7 +11,7 @@ public class ObraCompletaDto extends ObraDto {
         dto.numero = Integer.parseInt(obra.getId());
         dto.cabecalho = CabecalhoObraDto.deDominio(obra.getCabecalho());
         dto.avaliacao = obra.getAvaliacao() != null ? AvaliacaoDto.deDominio(obra.getAvaliacao()) : null;
-        dto.capitulos = CapitulosDto.deDominio(obra.getCapitulos());
+        dto.capitulos = CapitulosDto.deDominio(obra.obterListaCapitulos());
         return dto;
     }
 }
