@@ -2,7 +2,9 @@ package br.com.inkinvite.mock;
 
 import br.com.inkinvite.application.component.ObraComponent;
 import br.com.inkinvite.domain.DominioException;
+import br.com.inkinvite.domain.objetosDeValor.Avaliacao;
 import br.com.inkinvite.domain.obra.*;
+import br.com.inkinvite.infrastructure.dto.obra.AvaliacaoDto;
 import br.com.inkinvite.infrastructure.dto.obra.ObraCompletaDto;
 import br.com.inkinvite.infrastructure.dto.obra.ObraDto;
 import br.com.inkinvite.mock.mock.LogMockService;
@@ -12,6 +14,7 @@ import br.com.inkinvite.mock.mock.obra.StorageMockService;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -319,7 +322,7 @@ public class ObraTest {
     }
 
     @Test
-    void ordenarCapitulosEmObraQueNaoExiste(){
+    void ordenarCapitulosEmObraQueNaoExiste() {
         Integer numeroObra = 404;
         Capitulos capitulos = new Capitulos();
         ObraNaoExiste exception = assertThrows(
@@ -330,7 +333,7 @@ public class ObraTest {
     }
 
     @Test
-    void ordenarCapitulosComErroGenerico(){
+    void ordenarCapitulosComErroGenerico() {
         Integer numeroObra = 500;
         Capitulos capitulos = new Capitulos();
         Exception exception = assertThrows(
@@ -338,6 +341,14 @@ public class ObraTest {
                 () -> component.ordenarCapitulos(numeroObra, capitulos)
         );
         assertNotEquals(DominioException.class, exception.getClass());
+    }
+
+    @Test
+    void criarAvaliacao() {
+        Avaliacao avaliacao = Avaliacao.carregar(BigDecimal.TEN);
+        AvaliacaoDto dto = AvaliacaoDto.deDominio(avaliacao.obterValorAvaliacao());
+        avaliacao = dto.paraDominio();
+        assertEquals(BigDecimal.TEN, avaliacao.obterValorAvaliacao());
     }
 
 }

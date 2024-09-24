@@ -2,6 +2,7 @@ package br.com.inkinvite.interfaces.resources;
 
 import java.util.List;
 
+import br.com.inkinvite.domain.usuario.UsuarioNaoEncontrado;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 
@@ -61,6 +62,8 @@ public class ObraResources {
         try {
             component.criarObra(obra.paraDominio(), email);
             return Response.ok().build();
+        } catch (UsuarioNaoEncontrado e) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         } catch (Exception e) {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
